@@ -1,0 +1,31 @@
+{
+  "name": "find-job-bot",
+  "version": "1.0.0",
+  "main": "package/index.ts",
+  "repository": "git@github.com:distolma/find-job-bot.git",
+  "author": "distolma <djmakaron2009@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node $npm_package_main",
+    "dev": "ts-node -r dotenv/config $npm_package_main --inspect"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.0.2",
+    "@types/node": "^9.4.5",
+    "@types/node-telegram-bot-api": "^0.28.2",
+    "@types/xml2js": "^0.4.2",
+    "dotenv": "^5.0.0",
+    "prettier": "^1.10.2",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.7.0",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "mongoose": "^5.0.4",
+    "node-telegram-bot-api": "^0.30.0",
+    "xml2js": "^0.4.19"
+  }
+}
