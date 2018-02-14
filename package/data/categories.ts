@@ -1,0 +1,18 @@
+export default [
+  { value: 'Java', title: 'Java' },
+  { value: 'Python', title: 'Python' },
+  { value: '.NET', title: '.NET' },
+  { value: 'Ruby', title: 'Ruby' },
+  { value: 'PHP', title: 'PHP' },
+  { value: 'iOS/macOS', title: 'iOS/macOS' },
+  { value: 'C++', title: 'C++' },
+  { value: 'Android', title: 'Android' },
+  { value: 'QA', title: 'QA' },
+  { value: 'Front End', title: 'Front End' },
+  { value: 'Project Manager', title: 'Project Manager' },
+  { value: 'Дизайн', title: 'Desing' },
+  { value: 'Analyst', title: 'Analyst' },
+  { value: 'DevOps', title: 'DevOps' },
+  { value: 'relocation', title: 'Relocation' },
+  { value: 'beginners', title: 'For beginners' },
+];
