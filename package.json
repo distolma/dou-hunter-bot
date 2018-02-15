@@ -11,20 +11,20 @@
   },
   "devDependencies": {
     "@types/mongoose": "^5.0.2",
-    "@types/node": "^9.4.5",
+    "@types/node": "^9.4.6",
     "@types/node-telegram-bot-api": "^0.28.2",
     "@types/xml2js": "^0.4.2",
     "dotenv": "^5.0.0",
     "prettier": "^1.10.2",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.7.0",
+    "tslint-config-prettier": "^1.8.0",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.7.1"
+    "typescript": "^2.7.2"
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "mongoose": "^5.0.4",
+    "mongoose": "^5.0.5",
     "node-telegram-bot-api": "^0.30.0",
     "xml2js": "^0.4.19"
   }
