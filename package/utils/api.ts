@@ -10,4 +10,6 @@ export const getVacantions = (cities: string, category: string) =>
     transformResponse: [
       data => xmlParser(data),
     ],
-  });
+  })
+    .then(({ data }) => data)
+    .then(({ rss }) => rss.channel.item);
