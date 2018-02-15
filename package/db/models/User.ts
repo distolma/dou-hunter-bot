@@ -1,7 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
+export interface IUser {
+  tel_id: number;
+  first_name?: string;
+  last_name?: string;
+  username: string;
+  vacancies?: [[string, string]];
+}
 
-const userSchema = new Schema({
+export interface IUserModel extends IUser, Document { }
+
+export const userSchema = new Schema({
   tel_id: {
     type: Number,
     unique: true,
@@ -21,4 +30,4 @@ const userSchema = new Schema({
 //   next();
 // });
 
-export default model('User', userSchema);
+export default model<IUserModel>('User', userSchema);
