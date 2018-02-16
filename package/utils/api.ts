@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 import { xmlParser } from './xml-parser';
+import { DouRSS, UserVacancies } from '../interfaces';
 
 const { SOURCE_URL } = process.env;
 
-export const getVacantions = (cities: string, category: string) =>
-  axios.get(SOURCE_URL, {
-    params: { cities, category },
+export const getVacantions = (params: UserVacancies) =>
+  axios.get<DouRSS>(SOURCE_URL, {
+    params,
     transformResponse: [
       data => xmlParser(data),
     ],
