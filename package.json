@@ -6,14 +6,15 @@
   "author": "distolma <djmakaron2009@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node $npm_package_main",
-    "dev": "ts-node -r dotenv/config $npm_package_main --inspect"
+    "start": "cross-var ts-node $npm_package_main",
+    "dev": "cross-var ts-node -r dotenv/config $npm_package_main --inspect"
   },
   "devDependencies": {
     "@types/mongoose": "^5.0.2",
     "@types/node": "^9.4.6",
     "@types/node-telegram-bot-api": "^0.28.2",
     "@types/xml2js": "^0.4.2",
+    "cross-var": "^1.1.0",
     "dotenv": "^5.0.0",
     "prettier": "^1.10.2",
     "ts-node": "^4.1.0",
