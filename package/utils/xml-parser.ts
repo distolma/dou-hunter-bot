@@ -1,4 +1,7 @@
 import { parseString, OptionsV2 } from 'xml2js';
+import $ from 'cheerio';
+
+import { HtmlData } from '../interfaces';
 
 const conf: OptionsV2 = {
   explicitArray: false,
@@ -10,3 +13,13 @@ export const xmlParser = (xml: string) => new Promise((resolve, reject) =>
     if (err) reject(err);
     resolve(result);
   }));
+
+export const htmlParser = (html: string): HtmlData[] =>
+  $.load(html)('li.l-vacancy', 'ul.lt').map((_, vacancy) => ({
+    id: +$(vacancy).find('.vacancy').attr('_id'),
+    title: $(vacancy).find('.vt').text(),
+    company: $(vacancy).find('.company').text().trim(),
+    cities: $(vacancy).find('.cities').text().split(', '),
+    description: $(vacancy).find('.sh-info').text().trim(),
+    hot: $(vacancy).hasClass('__hot'),
+  })).toArray() as any;

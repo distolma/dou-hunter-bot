@@ -18,3 +18,12 @@ export interface Vacancy {
   pubDate: string;
   title: string;
 }
+
+export interface HtmlData {
+  id: number;
+  title: string;
+  company: string;
+  cities: string[];
+  description: string;
+  hot: boolean;
+}
