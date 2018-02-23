@@ -26,4 +26,5 @@ export interface HtmlData {
   cities: string[];
   description: string;
   hot: boolean;
+  url?: string;
 }
