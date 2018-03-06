@@ -1,5 +1,5 @@
 import xorBy from 'lodash/xorBy';
-import intersectionBy from 'lodash/intersectionBy';
+import unionBy from 'lodash/unionBy';
 
 import { getVacantions } from '../utils/api';
 import { getAllUsers } from './user';
@@ -24,20 +24,19 @@ export const hunt = async () => {
   });
 
   const newVac = xorBy<HtmlData>(ALL_VACANCIES, allVac, 'id');
-  const vacToRemove = intersectionBy<HtmlData, HtmlData>(ALL_VACANCIES, allVac, 'id');
 
-  ALL_VACANCIES = allVac;
-
-  console.log(newVac);
-  console.log(vacToRemove);
+  ALL_VACANCIES = unionBy(ALL_VACANCIES, allVac, 'id');
 
   const allUsers = await getAllUsers();
   allUsers.forEach(async user => {
     const text = newVac.map(vacancyMessage).join('\n')
 
-    await bot.sendMessage(user.tel_id, text, {
-      parse_mode: 'Markdown',
-      disable_web_page_preview: true,
-    });
+    if (text) {
+      console.log(newVac);
+      await bot.sendMessage(user.tel_id, text, {
+        parse_mode: 'Markdown',
+        disable_web_page_preview: true,
+      });
+    }
   });
 }
