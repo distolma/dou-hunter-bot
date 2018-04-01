@@ -6,8 +6,13 @@
   "author": "distolma <djmakaron2009@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "cross-var ts-node $npm_package_main",
-    "dev": "cross-var nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config $npm_package_main"
+    "start": "node dist/index.js",
+    "dev":
+      "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
+    "heroku-postbuild": "tsc"
+  },
+  "engines": {
+    "node": ">9"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.7",
@@ -16,8 +21,8 @@
     "@types/node": "^9.4.6",
     "@types/node-telegram-bot-api": "^0.28.2",
     "@types/xml2js": "^0.4.2",
-    "cross-var": "^1.1.0",
     "dotenv": "^5.0.1",
+    "gh-pages": "^1.1.0",
     "nodemon": "^1.17.1",
     "prettier": "^1.11.1",
     "ts-node": "^5.0.1",
