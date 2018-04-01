@@ -9,7 +9,7 @@ export interface DouRSS {
       title: string;
     };
   };
-};
+}
 
 export interface Vacancy {
   description: string;
