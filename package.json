@@ -7,12 +7,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/index.js",
-    "dev":
-      "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
+    "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
     "heroku-postbuild": "tsc"
   },
   "engines": {
-    "node": "9.10.1",
+    "node": ">9.0.0",
     "yarn": "1.5.1"
   },
   "devDependencies": {
@@ -37,6 +36,7 @@
     "cheerio": "^1.0.0-rc.2",
     "lodash": "^4.17.5",
     "mongoose": "^5.0.9",
+    "node-emoji": "^1.8.1",
     "node-telegram-bot-api": "^0.30.0",
     "xml2js": "^0.4.19"
   }
