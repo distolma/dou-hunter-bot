@@ -2,7 +2,7 @@ import xorBy from 'lodash/xorBy';
 import unionBy from 'lodash/unionBy';
 
 import { getVacantions } from '../utils/api';
-import { getAllUsers } from './user';
+// import { getAllUsers } from './user';
 import { bot } from '../bot';
 import { vacancyMessage } from '../templates';
 import { HtmlData } from '../interfaces';
