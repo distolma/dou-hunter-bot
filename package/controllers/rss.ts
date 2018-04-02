@@ -23,19 +23,21 @@ export const hunt = async () => {
     category: 'Front End',
   });
 
-  const newVac = xorBy<HtmlData>(ALL_VACANCIES, allVac, 'id');
+  const newVac = xorBy<HtmlData>(ALL_VACANCIES, allVac.splice(0, 15), 'id');
 
-  ALL_VACANCIES = unionBy(ALL_VACANCIES, allVac, 'id');
+  ALL_VACANCIES = unionBy(ALL_VACANCIES, 'id');
 
   const allUsers = await User.find();
-  allUsers.forEach(async user => {
-    const text = newVac.map(vacancyMessage).join('\n');
+  allUsers
+    .filter(user => user.status === 'active')
+    .forEach(async user => {
+      const text = newVac.map(vacancyMessage).join('\n');
 
-    if (text) {
-      await bot.sendMessage(user.tel_id, text, {
-        parse_mode: 'Markdown',
-        disable_web_page_preview: true,
-      });
-    }
-  });
+      if (text) {
+        await bot.sendMessage(user.tel_id, text, {
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+        });
+      }
+    });
 };

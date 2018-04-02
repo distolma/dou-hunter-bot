@@ -5,7 +5,8 @@ export interface IUser {
   first_name?: string;
   last_name?: string;
   username: string;
-  vacancies?: [[string, string]];
+  vacancies: [[string, string]];
+  status: 'active' | 'pause';
 }
 
 export interface IUserModel extends IUser, Document {}
@@ -19,6 +20,11 @@ export const userSchema = new Schema({
   last_name: String,
   username: String,
   vacancies: [[String, String]],
+  status: {
+    type: String,
+    enum: ['active', 'pause'],
+    default: 'active'
+  }
 });
 
 // userSchema.pre('save', function (next) {

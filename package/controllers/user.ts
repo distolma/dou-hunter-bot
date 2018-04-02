@@ -25,3 +25,9 @@ export const getUser = ({ from: { id } }: Message) =>
   User.findOne({ tel_id: id } as IUser).exec();
 
 export const getAllUsers = () => User.find();
+
+export const pauseUser = ({ from: { id } }: Message) =>
+  User.findOneAndUpdate({ tel_id: id }, { status: 'pause' }).exec();
+
+export const activateUser = ({ from: { id } }: Message) =>
+  User.findOneAndUpdate({ tel_id: id }, { status: 'active' }).exec();
