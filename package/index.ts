@@ -1,6 +1,7 @@
-import "./db";
+import './db';
+import './routes';
 
-import { hunt, initialRequest } from "./controllers/rss";
+import { hunt, initialRequest } from './controllers/rss';
 
 (async function() {
   await initialRequest();

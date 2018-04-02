@@ -1,8 +1,8 @@
-import { Message } from "node-telegram-bot-api";
+import { Message } from 'node-telegram-bot-api';
 
 import { bot } from '../bot';
 import * as userControllers from './user';
-import { welcomeMessage, welcomeMessageToNew } from '../messages';
+import { welcomeMessage, welcomeMessageToNew } from '../templates';
 
 export const onStart = async (message: Message) => {
   const chatId = message.chat.id;
@@ -13,7 +13,7 @@ export const onStart = async (message: Message) => {
     bot.sendMessage(chatId, welcomeMessageToNew(user), {
       reply_markup: {
         remove_keyboard: true,
-      }
+      },
     });
     return;
   }
@@ -21,7 +21,10 @@ export const onStart = async (message: Message) => {
   bot.sendMessage(chatId, welcomeMessage(user), {
     reply_markup: {
       remove_keyboard: true,
-    }
+    },
   });
-  return user;
-}
+};
+
+export const onPing = async (message: Message) => {
+  bot.sendMessage(message.from.id, 'pong');
+};

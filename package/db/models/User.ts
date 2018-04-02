@@ -8,7 +8,7 @@ export interface IUser {
   vacancies?: [[string, string]];
 }
 
-export interface IUserModel extends IUser, Document { }
+export interface IUserModel extends IUser, Document {}
 
 export const userSchema = new Schema({
   tel_id: {
