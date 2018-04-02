@@ -12,7 +12,8 @@
     "heroku-postbuild": "tsc"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": "9.10.1",
+    "yarn": "1.5.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.7",
