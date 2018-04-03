@@ -55,12 +55,15 @@ export const onConfig = async (message: Message) => {
 const getConfig = <T extends ICity>(id: number, list: T[]) =>
   new Promise<T>((resolve, reject) => {
     bot.sendMessage(id, setConfigList(list));
-    bot.once('message', (msg: Message) => {
-      if (msg.text && /\/\d+/.test(msg.text)) {
-        const selectId = +msg.text.substr(1) - 1;
-        resolve(list[selectId]);
-      } else {
-        reject();
+    bot.on('message', function messageReceiver(msg: Message) {
+      if (msg.from.id === id) {
+        bot.removeListener('message', messageReceiver);
+        if (msg.text && /\/\d+/.test(msg.text)) {
+          const selectId = +msg.text.substr(1) - 1;
+          resolve(list[selectId]);
+        } else {
+          reject();
+        }
       }
     });
   });
