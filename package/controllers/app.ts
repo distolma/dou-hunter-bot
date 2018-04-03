@@ -14,7 +14,7 @@ import { categories, ICategory } from '../data/categories';
 export const onStart = async (message: Message) => {
   const { id } = message.from;
 
-  let user = await userControllers.getUser(message);
+  let user = await userControllers.getUser(id);
   if (!user) {
     user = await userControllers.createUser(message);
     bot.sendMessage(id, welcomeMessageToNew(user));
@@ -29,12 +29,12 @@ export const onPing = async (message: Message) => {
 };
 
 export const onPause = async (message: Message) => {
-  await userControllers.pauseUser(message);
+  await userControllers.pauseUser(message.from.id);
   bot.sendMessage(message.from.id, 'Paused!');
 };
 
 export const onResume = async (message: Message) => {
-  await userControllers.activateUser(message);
+  await userControllers.activateUser(message.from.id);
   bot.sendMessage(message.from.id, 'Activated!');
 };
 

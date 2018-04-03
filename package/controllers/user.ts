@@ -1,14 +1,14 @@
 import { Message } from 'node-telegram-bot-api';
 import { model } from 'mongoose';
 
-import { IUserModel, IUser } from '../db/models/User';
+import { IUserModel } from '../db/models/User';
+import { IVacanciesInquiries } from '../interfaces';
 
 const User = model<IUserModel>('User');
 
 export const createUser = ({
   from: { id, first_name, last_name, username },
-}: Message) =>
-  new User({ tel_id: id, first_name, last_name, username } as IUser).save();
+}: Message) => new User({ tel_id: id, first_name, last_name, username }).save();
 
 export const updateUser = ({
   from: { id, first_name, last_name, username },
@@ -18,18 +18,21 @@ export const updateUser = ({
     { first_name, last_name, username },
   ).exec();
 
-export const removeUser = ({ from: { id } }: Message) =>
+export const removeUser = (id: number) =>
   User.findOneAndRemove({ tel_id: id }).exec();
 
-export const getUser = ({ from: { id } }: Message) =>
-  User.findOne({ tel_id: id } as IUser).exec();
+export const getUser = (id: number) => User.findOne({ tel_id: id }).exec();
 
 export const getAllUsers = () => User.find();
 
-export const pauseUser = ({ from: { id } }: Message) =>
+export const getActiveUsers = () => User.find({ status: 'active' });
+
+export const getPausedUsers = () => User.find({ status: 'pause' });
+
+export const pauseUser = (id: number) =>
   User.findOneAndUpdate({ tel_id: id }, { status: 'pause' }).exec();
 
-export const activateUser = ({ from: { id } }: Message) =>
+export const activateUser = (id: number) =>
   User.findOneAndUpdate({ tel_id: id }, { status: 'active' }).exec();
 
 export const setCity = (id: number, city: string) =>
@@ -37,3 +40,17 @@ export const setCity = (id: number, city: string) =>
 
 export const setCategory = (id: number, category: string) =>
   User.findOneAndUpdate({ tel_id: id }, { category }).exec();
+
+export const getVacanciesInquiry = async () => {
+  const map: IVacanciesInquiries = {};
+  const users = await getActiveUsers();
+
+  users.forEach(user => {
+    if (user.category && user.city) {
+      if (!map[user.category]) map[user.category] = [];
+      map[user.category].push(user.city);
+    }
+  });
+
+  return map;
+};
