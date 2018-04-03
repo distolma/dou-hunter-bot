@@ -44,3 +44,13 @@ interface IDOURemoteParams {
   remote: boolean;
   category: string;
 }
+
+export interface IVacancyMap {
+  [key: string]: {
+    [key: string]: IVacancy[];
+  };
+}
+
+export interface IVacanciesInquiries {
+  [key: string]: string[];
+}

@@ -1,7 +1,7 @@
 import { emoji } from 'node-emoji';
 
 import { IUser } from '../db/models/User';
-import { HtmlData } from '../interfaces';
+import { IVacancy } from '../interfaces';
 import { ICategory } from '../data/categories';
 import { ICity } from '../data/cities';
 
@@ -13,7 +13,7 @@ export const welcomeMessageToNew = (user: IUser) => `
 Welcome to DOU Hunter, ${user.first_name}!
 `;
 
-export const vacancyMessage = (vacancy: HtmlData) => `
+export const vacancyMessage = (vacancy: IVacancy) => `
 ${vacancy.hot ? emoji.fire + ' ' : ''}[${vacancy.title}](${vacancy.url}) at *${
   vacancy.company
 }*
