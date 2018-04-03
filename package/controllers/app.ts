@@ -1,8 +1,15 @@
 import { Message } from 'node-telegram-bot-api';
+import { emoji } from 'node-emoji';
 
 import { bot } from '../bot';
 import * as userControllers from './user';
-import { welcomeMessage, welcomeMessageToNew } from '../templates';
+import {
+  welcomeMessage,
+  welcomeMessageToNew,
+  setConfigList,
+} from '../templates';
+import { cities, ICity } from '../data/cities';
+import { categories, ICategory } from '../data/categories';
 
 export const onStart = async (message: Message) => {
   const { id } = message.from;
@@ -30,3 +37,30 @@ export const onResume = async (message: Message) => {
   await userControllers.activateUser(message);
   bot.sendMessage(message.from.id, 'Activated!');
 };
+
+export const onConfig = async (message: Message) => {
+  const { id } = message.from;
+
+  try {
+    const city = await getConfig<ICity>(id, cities);
+    await userControllers.setCity(id, city.value);
+
+    const category = await getConfig<ICategory>(id, categories);
+    await userControllers.setCategory(id, category.value);
+  } catch (error) {
+    bot.sendMessage(id, 'wrong' + emoji.smirk);
+  }
+};
+
+const getConfig = <T extends ICity>(id: number, list: T[]) =>
+  new Promise<T>((resolve, reject) => {
+    bot.sendMessage(id, setConfigList(list));
+    bot.once('message', (msg: Message) => {
+      if (msg.text && /\/\d+/.test(msg.text)) {
+        const selectId = +msg.text.substr(1) - 1;
+        resolve(list[selectId]);
+      } else {
+        reject();
+      }
+    });
+  });

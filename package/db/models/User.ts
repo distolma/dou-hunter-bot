@@ -5,7 +5,8 @@ export interface IUser {
   first_name?: string;
   last_name?: string;
   username: string;
-  vacancies: [[string, string]];
+  city?: string;
+  category?: string;
   status: 'active' | 'pause';
 }
 
@@ -19,12 +20,13 @@ export const userSchema = new Schema({
   first_name: String,
   last_name: String,
   username: String,
-  vacancies: [[String, String]],
+  city: String,
+  category: String,
   status: {
     type: String,
     enum: ['active', 'pause'],
-    default: 'active'
-  }
+    default: 'active',
+  },
 });
 
 // userSchema.pre('save', function (next) {

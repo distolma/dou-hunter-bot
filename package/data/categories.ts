@@ -1,5 +1,10 @@
-export default [
-  { value: '', title: 'Всі категорії' },
+export interface ICategory {
+  value: string;
+  title: string;
+}
+
+export const categories: Array<ICategory> = [
+  // { value: '', title: 'Всі категорії' },
   { value: '.NET', title: '.NET' },
   { value: '1С', title: '1С' },
   { value: 'Analyst', title: 'Analyst' },

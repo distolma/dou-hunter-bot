@@ -1,4 +1,9 @@
-export default [
+export interface ICity {
+  value: string;
+  title: string;
+}
+
+export const cities: Array<ICity> = [
   { value: 'Kyiv', title: 'Kyiv' },
   { value: 'Kharkiv', title: 'Kharkiv' },
   { value: 'Lviv', title: 'Lviv' },

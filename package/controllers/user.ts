@@ -31,3 +31,9 @@ export const pauseUser = ({ from: { id } }: Message) =>
 
 export const activateUser = ({ from: { id } }: Message) =>
   User.findOneAndUpdate({ tel_id: id }, { status: 'active' }).exec();
+
+export const setCity = (id: number, city: string) =>
+  User.findOneAndUpdate({ tel_id: id }, { city }).exec();
+
+export const setCategory = (id: number, category: string) =>
+  User.findOneAndUpdate({ tel_id: id }, { category }).exec();
