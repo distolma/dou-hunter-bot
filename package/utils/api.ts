@@ -1,14 +1,35 @@
 import axios from 'axios';
+import cookie from 'cookie';
 
-import { douParser } from './xml-parser';
-import { HtmlData, UserVacancies } from '../interfaces';
+import { getCSRFMiddlewareToken, getVacancyList } from './parser';
+import { IDOUTokens, IDOUParams, IDOUXHRResponse } from '../interfaces';
 
-const { SOURCE_URL } = process.env;
+const { SOURCE_URL, XHR_URL } = process.env;
 
-export const getVacantions = (params: UserVacancies) =>
-  axios
-    .get<HtmlData[]>(SOURCE_URL, {
+const getTokens = () =>
+  axios.get<string>(SOURCE_URL).then<IDOUTokens>(response => {
+    const { csrftoken } = cookie.parse(response.headers['set-cookie'][0]);
+    const csrfmiddlewaretoken = getCSRFMiddlewareToken(response.data);
+
+    return { csrftoken, csrfmiddlewaretoken };
+  });
+
+const getVacanciesTemplate = (params: IDOUParams) => (tokens: IDOUTokens) =>
+  axios.post<IDOUXHRResponse>(
+    XHR_URL,
+    `csrfmiddlewaretoken=${tokens.csrfmiddlewaretoken}`,
+    {
       params,
-      transformResponse: [data => douParser(data)],
-    })
-    .then(({ data }) => data);
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Referer: SOURCE_URL,
+        Cookie: cookie.serialize('csrftoken', tokens.csrftoken),
+      },
+    },
+  );
+
+export const getVacancies = (params: IDOUParams) =>
+  getTokens()
+    .then(getVacanciesTemplate(params))
+    .then(response => response.data.html)
+    .then(getVacancyList);
