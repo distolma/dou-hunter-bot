@@ -46,6 +46,10 @@
     "@types/mongodb" "*"
     "@types/node" "*"
 
+"@types/node-emoji@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.0.tgz#6bc88a880cdcb3c165e2828d056db242e8829a8b"
+
 "@types/node-telegram-bot-api@^0.28.2":
   version "0.28.2"
   resolved "https://registry.yarnpkg.com/@types/node-telegram-bot-api/-/node-telegram-bot-api-0.28.2.tgz#5debdb9f8021657b32aaa48b8deaf8472e449486"
