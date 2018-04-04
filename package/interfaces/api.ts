@@ -52,5 +52,5 @@ export interface IVacancyMap {
 }
 
 export interface IVacanciesInquiries {
-  [key: string]: string[];
+  [key: string]: Set<string>;
 }

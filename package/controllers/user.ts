@@ -46,9 +46,11 @@ export const getVacanciesInquiry = async () => {
   const users = await getActiveUsers();
 
   users.forEach(user => {
-    if (user.category && user.city) {
-      if (!map[user.category]) map[user.category] = [];
-      map[user.category].push(user.city);
+    const { category, city } = user;
+
+    if (category && city) {
+      if (!map[category]) map[category] = new Set();
+      map[category].add(city);
     }
   });
 
