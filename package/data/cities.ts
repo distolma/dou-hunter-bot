@@ -23,6 +23,6 @@ export const cities: Array<ICity> = [
   { value: 'Minsk', title: 'Minsk' },
   { value: 'Kryvyi Rih', title: 'Kryvyi Rih' },
   { value: 'Zhytomyr', title: 'Zhytomyr' },
-  { value: 'remote', title: 'Remote' },
-  { value: 'relocation', title: 'Relocation' },
+  // { value: 'remote', title: 'Remote' },
+  // { value: 'relocation', title: 'Relocation' },
 ];

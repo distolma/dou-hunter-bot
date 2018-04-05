@@ -19,33 +19,17 @@ export interface IDOUXHRResponse {
   num: number;
 }
 
-export type IDOUParams =
-  | IDOURelocationParams
-  | IDOUBeginnersParams
-  | IDOURemoteParams
-  | IDOUCityParams;
-
-interface IDOUCityParams {
+export interface IDOUParams {
   city: string;
   category: string;
 }
 
-interface IDOURelocationParams {
-  relocation: boolean;
-  category: string;
+export interface IDOUResponse {
+  vacancies: IVacancy[];
+  params: IDOUParams;
 }
 
-interface IDOUBeginnersParams {
-  beginners: boolean;
-  category: string;
-}
-
-interface IDOURemoteParams {
-  remote: boolean;
-  category: string;
-}
-
-export interface IVacancyMap {
+export interface IVacancyTree {
   [key: string]: {
     [key: string]: IVacancy[];
   };

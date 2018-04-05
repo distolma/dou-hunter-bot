@@ -4,7 +4,6 @@ export interface ICategory {
 }
 
 export const categories: Array<ICategory> = [
-  // { value: '', title: 'Всі категорії' },
   { value: '.NET', title: '.NET' },
   { value: '1С', title: '1С' },
   { value: 'Analyst', title: 'Analyst' },
@@ -43,4 +42,5 @@ export const categories: Array<ICategory> = [
   { value: 'Дизайн', title: 'Дизайн' },
   { value: 'Маркетинг', title: 'Маркетинг' },
   { value: 'Системный администратор', title: 'Системный администратор' },
+  { value: 'beginners', title: 'Beginners' },
 ];

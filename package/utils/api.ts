@@ -2,7 +2,12 @@ import axios from 'axios';
 import cookie from 'cookie';
 
 import { getCSRFMiddlewareToken, getVacancyList } from './parser';
-import { IDOUTokens, IDOUParams, IDOUXHRResponse } from '../interfaces';
+import {
+  IDOUTokens,
+  IDOUParams,
+  IDOUXHRResponse,
+  IDOUResponse,
+} from '../interfaces';
 
 const { SOURCE_URL, XHR_URL } = process.env;
 
@@ -31,7 +36,11 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
       },
     )
     .then(response => response.data.html)
-    .then(getVacancyList);
+    .then(getVacancyList)
+    .then<IDOUResponse>(vacancies => ({
+      vacancies,
+      params,
+    }));
 
 // export const getVacancies = (params: IDOUParams) =>
 //   getTokens()
