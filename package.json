@@ -17,26 +17,26 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.7",
     "@types/cookie": "^0.3.1",
-    "@types/lodash": "^4.14.104",
-    "@types/mongoose": "^5.0.6",
-    "@types/node": "^9.4.6",
+    "@types/lodash": "^4.14.106",
+    "@types/mongoose": "^5.0.7",
+    "@types/node": "^9.6.2",
     "@types/node-emoji": "^1.8.0",
     "@types/node-telegram-bot-api": "^0.28.2",
     "dotenv": "^5.0.1",
-    "nodemon": "^1.17.1",
+    "nodemon": "^1.17.3",
     "prettier": "^1.11.1",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.9.0",
+    "tslint-config-prettier": "^1.10.0",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.1"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "cookie": "^0.3.1",
     "lodash": "^4.17.5",
-    "mongoose": "^5.0.9",
+    "mongoose": "^5.0.12",
     "node-emoji": "^1.8.1",
     "node-telegram-bot-api": "^0.30.0"
   }
