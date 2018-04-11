@@ -41,9 +41,3 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
       vacancies,
       params,
     }));
-
-// export const getVacancies = (params: IDOUParams) =>
-//   getTokens()
-//     .then(getVacanciesTemplate(params))
-//     .then(response => response.data.html)
-//     .then(getVacancyList);
