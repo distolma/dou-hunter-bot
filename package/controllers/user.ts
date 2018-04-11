@@ -41,6 +41,9 @@ export const setCity = (id: number, city: string) =>
 export const setCategory = (id: number, category: string) =>
   User.findOneAndUpdate({ tel_id: id }, { category }).exec();
 
+export const findActiveUsers = (params: any) =>
+  User.find({ ...params, status: 'active' }).exec();
+
 export const getVacanciesInquiry = async () => {
   const map: IVacanciesInquiries = {};
   const users = await getActiveUsers();

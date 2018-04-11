@@ -3,11 +3,11 @@ import $ from 'cheerio';
 import { IVacancy } from '../interfaces';
 
 export const getVacancyList = (html: string) =>
-  Array.from($.load(html)('.vacancy')).map<IVacancy>(vacancy => {
+  Array.from($.load(html)('.l-vacancy')).map<IVacancy>(vacancy => {
     const $vacancy = $(vacancy);
 
     return {
-      id: +$vacancy.attr('_id'),
+      id: +$vacancy.find('.vacancy').attr('_id'),
       title: $vacancy
         .find('.vt')
         .text()
@@ -20,9 +20,15 @@ export const getVacancyList = (html: string) =>
       description: $vacancy
         .find('.sh-info')
         .text()
-        .trim(),
+        .trim()
+        .replace(/\n+/, '\n'),
       hot: $vacancy.hasClass('__hot'),
-      cities: getCities($vacancy.find('.cities').text()),
+      cities: getCities(
+        $vacancy
+          .find('.cities')
+          .text()
+          .trim(),
+      ),
     };
   });
 
