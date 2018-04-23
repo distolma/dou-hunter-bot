@@ -1,5 +1,3 @@
-// import { } from 'lodash';
-
 import {
   IVacanciesInquiries,
   IDOUResponse,
@@ -11,6 +9,7 @@ import { findActiveUsers } from './user';
 import { vacancyMessage } from '../templates';
 import { bot } from '../bot';
 import { IUserModel } from '../db/models/User';
+import { VacancyTree } from '../utils/vacancy-tree';
 
 export const createVacanciesRequests = async (
   inquiries: IVacanciesInquiries,
@@ -27,21 +26,8 @@ export const createVacanciesRequests = async (
     }
   }
 
-  return Promise.all(requests);
-};
-
-export const mapResposeToTree = (response: Array<IDOUResponse>) => {
-  const tree: IVacancyTree = {};
-
-  response.forEach(({ params, vacancies }) => {
-    const { category, city } = params;
-
-    if (!tree[category]) tree[category] = {};
-    if (!tree[category][city]) tree[category][city] = [];
-    tree[category][city] = vacancies;
-  });
-
-  return tree;
+  const response = await Promise.all(requests);
+  return new VacancyTree(response);
 };
 
 export const notifyUsers = async (tree: IVacancyTree) => {
@@ -52,8 +38,6 @@ export const notifyUsers = async (tree: IVacancyTree) => {
       for (const city in categoryObj) {
         if (categoryObj.hasOwnProperty(city)) {
           const vacancies = categoryObj[city];
-
-          // TODO vacancies sieve
 
           const messages = messageDivisor(vacancies);
           const users = await findActiveUsers({ category, city });
@@ -108,5 +92,3 @@ export const messageDivisor = (messages: IVacancy[]) => {
 
   return dividedMessage;
 };
-
-// export const vacanciesSieve = () => {};
