@@ -1,4 +1,4 @@
-import { transform, differenceBy, difference, isArray, isEmpty } from 'lodash';
+import { transform, differenceBy, isArray, isEmpty } from 'lodash';
 
 import { IDOUResponse, IVacancyTree } from '../interfaces';
 
