@@ -39,7 +39,7 @@ export class VacancyTree {
         const arrDiff = differenceBy(value, base[key], 'id');
         if (!isEmpty(arrDiff)) result[key] = arrDiff;
       } else {
-        const diff = difference(value as any, base[key]);
+        const diff = this.difference(value as any, base[key]);
         if (!isEmpty(diff)) result[key] = diff;
       }
     });
