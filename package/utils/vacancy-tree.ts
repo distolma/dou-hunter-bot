@@ -1,4 +1,4 @@
-import { transform, difference, isArray, isEmpty } from 'lodash';
+import { transform, differenceBy, difference, isArray, isEmpty } from 'lodash';
 
 import { IDOUResponse, IVacancyTree } from '../interfaces';
 
@@ -14,7 +14,9 @@ export class VacancyTree {
   }
 
   public returnNew(tree: IVacancyTree): IVacancyTree {
-    return this.difference(tree, this.value);
+    const diff = this.difference(tree, this.value);
+    console.log(diff);
+    return diff;
   }
 
   private parseToTree(vacancies: Array<IDOUResponse>): IVacancyTree {
@@ -34,7 +36,7 @@ export class VacancyTree {
       if (!base[key]) return (result[key] = value);
 
       if (isArray(value) && isArray(base[key])) {
-        const arrDiff = difference(value, base[key]);
+        const arrDiff = differenceBy(value, base[key], 'id');
         if (!isEmpty(arrDiff)) result[key] = arrDiff;
       } else {
         const diff = difference(value as any, base[key]);
