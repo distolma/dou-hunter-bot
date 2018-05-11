@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
-    "heroku-postbuild": "tsc"
+    "build": "tsc"
   },
   "engines": {
     "node": ">9.0.0",
