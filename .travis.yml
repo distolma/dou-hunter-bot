@@ -3,10 +3,6 @@ node_js:
   - "stable"
 script:
   - npm run build
-before_install:
-  - npm install -g yarn --cache-min 999999999
-install:
-  - yarn
 deploy:
   provider: heroku
   skip_cleanup: true
