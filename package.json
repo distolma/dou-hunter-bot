@@ -8,11 +8,11 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
-    "heroku-postbuild": "tsc"
+    "build": "tsc"
   },
   "engines": {
     "node": ">9.0.0",
-    "yarn": "1.5.1"
+    "yarn": ">1.2.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.7",
