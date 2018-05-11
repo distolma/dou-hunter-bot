@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "9"
+script:
+  - npm run build
+deploy:
+  provider: heroku
+  skip_cleanup: true
+  local_dir: dist
+  api_key:
+    secure: $HEROKU_TOKEN
+  app: dou-hunter-bot
