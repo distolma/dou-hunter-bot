@@ -6,6 +6,10 @@ import {
   notifyUsers,
 } from './controllers/subscription';
 import { VacancyTree } from './utils/vacancy-tree';
+import { bot } from './bot';
+import { start } from './server';
+
+start(bot);
 
 let VACANCIES: VacancyTree;
 
