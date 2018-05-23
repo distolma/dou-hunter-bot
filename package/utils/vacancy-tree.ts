@@ -14,9 +14,7 @@ export class VacancyTree {
   }
 
   public returnNew(tree: IVacancyTree): IVacancyTree {
-    const diff = this.difference(tree, this.value);
-    console.log(diff);
-    return diff;
+    return this.difference(tree, this.value);
   }
 
   private parseToTree(vacancies: Array<IDOUResponse>): IVacancyTree {

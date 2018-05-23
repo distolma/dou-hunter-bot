@@ -1,5 +1,5 @@
 export interface IVacancy {
-  id: number;
+  $id: number;
   title: string;
   company: string;
   cities: string[];

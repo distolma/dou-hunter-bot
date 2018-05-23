@@ -1,10 +1,9 @@
 import { Message } from 'node-telegram-bot-api';
-import { model } from 'mongoose';
 
-import { IUserModel } from '../db/models/User';
+import { User } from '../db';
 import { IVacanciesInquiries } from '../interfaces';
 
-const User = model<IUserModel>('User');
+User.getVacanciesInquiry();
 
 export const createUser = ({
   from: { id, first_name, last_name, username },

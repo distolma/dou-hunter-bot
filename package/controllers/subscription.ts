@@ -8,7 +8,7 @@ import { getTokens, getVacanciesTemplate } from '../utils/api';
 import { findActiveUsers } from './user';
 import { vacancyMessage } from '../templates';
 import { bot } from '../bot';
-import { IUserModel } from '../db/models/User';
+import { IUserDocument } from '../db/models/User';
 import { VacancyTree } from '../utils/vacancy-tree';
 
 export const createVacanciesRequests = async (
@@ -49,13 +49,13 @@ export const notifyUsers = async (tree: IVacancyTree) => {
   }
 };
 
-export const sendMessages = (users: IUserModel[], messages: string[]) =>
+export const sendMessages = (users: IUserDocument[], messages: string[]) =>
   messages.reduce(
     (promise, message) => promise.then(() => sendMessage(users, message)),
     Promise.resolve<any>(0),
   );
 
-export const sendMessage = (users: IUserModel[], message: string) =>
+export const sendMessage = (users: IUserDocument[], message: string) =>
   users.reduce(
     (promise, user) =>
       promise.then(() =>
