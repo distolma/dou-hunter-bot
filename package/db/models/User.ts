@@ -17,7 +17,9 @@ export interface IUserDocument extends IUser, Document {}
 
 export interface IUserModel extends Model<IUserDocument> {
   getVacanciesInquiry(): Promise<IVacanciesInquiries>;
-  getActive(): Promise<Array<IUserDocument>>;
+  getActives(): Promise<Array<IUserDocument>>;
+  getById(id: number): Promise<IUserDocument>;
+  updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
 }
 
 export const userSchema = new Schema({
@@ -43,7 +45,7 @@ export const userSchema = new Schema({
 
 userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
   const map = {};
-  for (const user of await this.getActive()) {
+  for (const user of await this.getActives()) {
     const { category, city } = user;
     if (category && city) {
       if (!map[category]) map[category] = new Set();
@@ -53,6 +55,28 @@ userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
   return map;
 });
 
-userSchema.static('getActive', async function(this: IUserModel) {
+userSchema.static('getActives', function(this: IUserModel) {
   return this.find({ status: 'active' }).exec();
 });
+
+userSchema.static('getById', function(this: IUserModel, id: number) {
+  return this.findOne({ tel_id: id }).exec();
+});
+
+userSchema.static('updateUser', function(
+  this: IUserModel,
+  id: number,
+  user: Partial<IUser>,
+) {
+  return this.findOneAndUpdate({ tel_id: id }, user).exec();
+});
+
+// userSchema.static('updateUser', function(
+//   this: IUserModel,
+
+// ) {
+//   export const createUser = ({
+//     from: { id, first_name, last_name, username },
+//   }: Message) =>
+//     new User({ tel_id: id, first_name, last_name, username }).save();
+// });
