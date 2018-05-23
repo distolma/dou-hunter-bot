@@ -1,4 +1,6 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, Document, Model } from 'mongoose';
+
+import { IVacanciesInquiries } from '../../interfaces';
 
 export interface IUser {
   tel_id: number;
@@ -8,9 +10,15 @@ export interface IUser {
   city?: string;
   category?: string;
   status: 'active' | 'pause';
+  created: number;
 }
 
-export interface IUserModel extends IUser, Document {}
+export interface IUserDocument extends IUser, Document {}
+
+export interface IUserModel extends Model<IUserDocument> {
+  getVacanciesInquiry(): Promise<IVacanciesInquiries>;
+  getActive(): Promise<Array<IUserDocument>>;
+}
 
 export const userSchema = new Schema({
   tel_id: {
@@ -27,15 +35,24 @@ export const userSchema = new Schema({
     enum: ['active', 'pause'],
     default: 'active',
   },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// userSchema.pre('save', function (next) {
-//   if (!this.isModified('first_name') || !this.isModified('last_name')) {
-//     next(); // skip
-//     return; // stop
-//   }
-//   this.full_name = `${this.first_name} ${this.last_name}`;
-//   next();
-// });
+userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
+  const map = {};
+  for (const user of await this.getActive()) {
+    const { category, city } = user;
+    if (category && city) {
+      if (!map[category]) map[category] = new Set();
+      map[category].add(city);
+    }
+  }
+  return map;
+});
 
-export default model<IUserModel>('User', userSchema);
+userSchema.static('getActive', async function(this: IUserModel) {
+  return this.find({ status: 'active' }).exec();
+});
