@@ -1,3 +1,4 @@
+import { model } from 'mongoose';
 import { Message } from 'node-telegram-bot-api';
 import { emoji } from 'node-emoji';
 
@@ -10,15 +11,23 @@ import {
 } from '../templates';
 import { cities, ICity } from '../data/cities';
 import { categories, ICategory } from '../data/categories';
+import { IUserModel } from '../db/models/User';
+
+const User = model<IUserModel>('User');
 
 export const onStart = async (message: Message) => {
-  const { id } = message.from;
+  const { id } = message.chat;
 
   let user = await userControllers.getUser(id);
   if (!user) {
     user = await userControllers.createUser(message);
     bot.sendMessage(id, welcomeMessageToNew(user));
+    cofigure(id);
     return;
+  }
+
+  if (user.status === 'pending') {
+    cofigure(id);
   }
 
   bot.sendMessage(id, welcomeMessage(user));
@@ -41,15 +50,7 @@ export const onResume = async (message: Message) => {
 export const onConfig = async (message: Message) => {
   const { id } = message.from;
 
-  try {
-    const city = await getConfig<ICity>(id, cities);
-    await userControllers.setCity(id, city.value);
-
-    const category = await getConfig<ICategory>(id, categories);
-    await userControllers.setCategory(id, category.value);
-  } catch (error) {
-    bot.sendMessage(id, 'wrong' + emoji.smirk);
-  }
+  cofigure(id);
 };
 
 const getConfig = <T extends ICity>(id: number, list: T[]) =>
@@ -67,3 +68,19 @@ const getConfig = <T extends ICity>(id: number, list: T[]) =>
       }
     });
   });
+
+const cofigure = async (id: number) => {
+  await User.findOneAndUpdate({ tel_id: id }, { status: 'pending' }).exec();
+
+  try {
+    const city = await getConfig<ICity>(id, cities);
+    await userControllers.setCity(id, city.value);
+
+    const category = await getConfig<ICategory>(id, categories);
+    await userControllers.setCategory(id, category.value);
+    await User.findOneAndUpdate({ tel_id: id }, { status: 'active' }).exec();
+    bot.sendMessage(id, 'ready! ' + emoji.v);
+  } catch (error) {
+    bot.sendMessage(id, 'wrong' + emoji.smirk);
+  }
+};

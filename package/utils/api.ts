@@ -31,7 +31,10 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Referer: SOURCE_URL,
-          Cookie: cookie.serialize('csrftoken', tokens.csrftoken),
+          Cookie: [
+            cookie.serialize('csrftoken', tokens.csrftoken),
+            cookie.serialize('lang', 'en'),
+          ].join('; '),
         },
       },
     )
@@ -40,4 +43,11 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
     .then<IDOUResponse>(vacancies => ({
       vacancies,
       params,
-    }));
+    }))
+    .catch(err => {
+      console.log(err.message);
+      return {
+        vacancies: [],
+        params,
+      } as IDOUResponse;
+    });

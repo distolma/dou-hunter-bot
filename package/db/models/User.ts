@@ -4,10 +4,12 @@ export interface IUser {
   tel_id: number;
   first_name?: string;
   last_name?: string;
-  username: string;
+  username?: string;
   city?: string;
   category?: string;
-  status: 'active' | 'pause';
+  status: 'active' | 'pause' | 'pending';
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface IUserModel extends IUser, Document {}
@@ -24,9 +26,21 @@ export const userSchema = new Schema({
   category: String,
   status: {
     type: String,
-    enum: ['active', 'pause'],
-    default: 'active',
+    enum: ['active', 'pause', 'pending'],
+    default: 'pending',
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+userSchema.pre('save', function(this: IUserModel) {
+  this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
 // userSchema.pre('save', function (next) {
