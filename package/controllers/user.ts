@@ -3,11 +3,9 @@ import { Message } from 'node-telegram-bot-api';
 import { User } from '../db';
 import { IVacanciesInquiries } from '../interfaces';
 
-User.getVacanciesInquiry();
-
 export const createUser = ({
   from: { id, first_name, last_name, username },
-}: Message) => new User({ tel_id: id, first_name, last_name, username }).save();
+}: Message) => User.create({ tel_id: id, first_name, last_name, username });
 
 export const updateUser = ({
   from: { id, first_name, last_name, username },

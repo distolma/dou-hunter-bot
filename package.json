@@ -24,6 +24,7 @@
     "@types/lodash": "^4.14.106",
     "@types/mongoose": "^5.0.7",
     "@types/node": "^9.6.2",
+    "@types/node-cron": "^1.2.0",
     "@types/node-emoji": "^1.8.0",
     "@types/node-telegram-bot-api": "^0.28.2",
     "dotenv": "^5.0.1",
@@ -44,6 +45,7 @@
     "koa-router": "^7.4.0",
     "lodash": "^4.17.5",
     "mongoose": "^5.0.12",
+    "node-cron": "^1.2.1",
     "node-emoji": "^1.8.1",
     "node-telegram-bot-api": "^0.30.0"
   }

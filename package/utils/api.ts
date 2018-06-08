@@ -31,13 +31,19 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Referer: SOURCE_URL,
-          Cookie: cookie.serialize('csrftoken', tokens.csrftoken),
+          Cookie: [
+            cookie.serialize('csrftoken', tokens.csrftoken),
+            cookie.serialize('lang', 'en'),
+          ].join('; '),
         },
       },
     )
     .then(response => response.data.html)
     .then(getVacancyList)
-    .then<IDOUResponse>(vacancies => ({
-      vacancies,
-      params,
-    }));
+    .then<IDOUResponse[]>(vacancies =>
+      vacancies.map(vacancy => ({ ...vacancy, ...params })),
+    )
+    .catch(() => {
+      console.log('fuck');
+      return [];
+    });

@@ -10,15 +10,23 @@ import {
 } from '../templates';
 import { cities, ICity } from '../data/cities';
 import { categories, ICategory } from '../data/categories';
+import { User } from '../db';
 
 export const onStart = async (message: Message) => {
-  const { id } = message.from;
+  const { id } = message.chat;
 
   let user = await userControllers.getUser(id);
   if (!user) {
     user = await userControllers.createUser(message);
     bot.sendMessage(id, welcomeMessageToNew(user));
+
+    configureUser(id);
+
     return;
+  }
+
+  if (user.status === 'pending') {
+    configureUser(id);
   }
 
   bot.sendMessage(id, welcomeMessage(user));
@@ -41,15 +49,7 @@ export const onResume = async (message: Message) => {
 export const onConfig = async (message: Message) => {
   const { id } = message.from;
 
-  try {
-    const city = await getConfig<ICity>(id, cities);
-    await userControllers.setCity(id, city.value);
-
-    const category = await getConfig<ICategory>(id, categories);
-    await userControllers.setCategory(id, category.value);
-  } catch (error) {
-    bot.sendMessage(id, 'wrong' + emoji.smirk);
-  }
+  configureUser(id);
 };
 
 const getConfig = <T extends ICity>(id: number, list: T[]) =>
@@ -67,3 +67,20 @@ const getConfig = <T extends ICity>(id: number, list: T[]) =>
       }
     });
   });
+
+const configureUser = async (id: number) => {
+  await User.updateUser(id, { status: 'pending' });
+
+  try {
+    const city = await getConfig<ICity>(id, cities);
+    await userControllers.setCity(id, city.value);
+
+    const category = await getConfig<ICategory>(id, categories);
+    await userControllers.setCategory(id, category.value);
+
+    User.updateUser(id, { status: 'active' });
+    bot.sendMessage(id, 'we are ready! ' + emoji.v);
+  } catch (error) {
+    bot.sendMessage(id, 'wrong' + emoji.smirk);
+  }
+};

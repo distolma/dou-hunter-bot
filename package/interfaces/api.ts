@@ -1,5 +1,5 @@
 export interface IVacancy {
-  $id: number;
+  id: number;
   title: string;
   company: string;
   cities: string[];
@@ -24,10 +24,7 @@ export interface IDOUParams {
   category: string;
 }
 
-export interface IDOUResponse {
-  vacancies: IVacancy[];
-  params: IDOUParams;
-}
+export interface IDOUResponse extends IVacancy, IDOUParams {}
 
 export interface IVacancyTree {
   [key: string]: {

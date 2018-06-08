@@ -7,7 +7,7 @@ export const getVacancyList = (html: string) =>
     const $vacancy = $(vacancy);
 
     return {
-      $id: +$vacancy.find('.vacancy').attr('_id'),
+      id: +$vacancy.find('.vacancy').attr('_id'),
       title: $vacancy
         .find('.vt')
         .text()

@@ -1,22 +1,23 @@
 import { Schema, Document, Model } from 'mongoose';
 
-import { IVacanciesInquiries } from '../../interfaces';
+// import { IVacanciesInquiries } from '../../interfaces';
 
 export interface IUser {
   tel_id: number;
   first_name?: string;
   last_name?: string;
-  username: string;
+  username?: string;
   city?: string;
   category?: string;
-  status: 'active' | 'pause';
-  created: number;
+  status: 'active' | 'pause' | 'pending';
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface IUserDocument extends IUser, Document {}
 
 export interface IUserModel extends Model<IUserDocument> {
-  getVacanciesInquiry(): Promise<IVacanciesInquiries>;
+  // getVacanciesInquiry(): Promise<IVacanciesInquiries>;
   getActives(): Promise<Array<IUserDocument>>;
   getById(id: number): Promise<IUserDocument>;
   updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
@@ -34,26 +35,35 @@ export const userSchema = new Schema({
   category: String,
   status: {
     type: String,
-    enum: ['active', 'pause'],
-    default: 'active',
+    enum: ['active', 'pause', 'pending'],
+    default: 'pending',
   },
-  created: {
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
-  const map = {};
-  for (const user of await this.getActives()) {
-    const { category, city } = user;
-    if (category && city) {
-      if (!map[category]) map[category] = new Set();
-      map[category].add(city);
-    }
-  }
-  return map;
+// Hooks
+userSchema.pre('save', function(this: IUserDocument) {
+  this.update({}, { $set: { updatedAt: Date.now() } });
 });
+
+// userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
+//   const map = {};
+//   for (const user of await this.getActives()) {
+//     const { category, city } = user;
+//     if (category && city) {
+//       if (!map[category]) map[category] = new Set();
+//       map[category].add(city);
+//     }
+//   }
+//   return map;
+// });
 
 userSchema.static('getActives', function(this: IUserModel) {
   return this.find({ status: 'active' }).exec();

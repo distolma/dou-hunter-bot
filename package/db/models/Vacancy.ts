@@ -1,47 +1,72 @@
-// import { Schema, model, Document } from 'mongoose';
+import { Schema, Model, Document } from 'mongoose';
+import { differenceBy, uniqBy } from 'lodash';
 
-// import { IVacancy } from '../../interfaces';
+import { IVacancy, IDOUResponse } from '../../interfaces';
 // import { categories } from '../../data/categories';
 // import { cities } from '../../data/cities';
 
-// export interface IVacancyDocument extends IVacancy, Document {
-//   created: number;
-//   category: string;
-// }
+export interface IVacancyDocument extends IVacancy, Document {
+  id: any;
+  created: number;
+  category: string;
+}
 
-// export const vacancySchema = new Schema({
-//   $id: {
-//     type: Number,
-//     unique: true,
-//   },
-//   category: {
-//     type: String,
-//     enum: categories.map(category => category.value),
-//   },
-//   title: {
-//     type: String,
-//     trim: true,
-//   },
-//   cities: [
-//     {
-//       type: String,
-//       enum: cities.map(city => city.value),
-//     },
-//   ],
-//   company: {
-//     type: String,
-//     trim: true,
-//   },
-//   description: {
-//     type: String,
-//     trim: true,
-//   },
-//   hot: Boolean,
-//   url: String,
-//   created: {
-//     type: Date,
-//     default: Date.now,
-//   },
-// });
+export interface IVacancyModel extends Model<IVacancyDocument> {
+  insertVacancies: (vacancies: IDOUResponse[]) => Promise<IVacancyDocument[]>;
+}
 
-// export default model<IVacancyDocument>('Vacancy', vacancySchema);
+export const vacancySchema = new Schema({
+  id: {
+    type: Number,
+    unique: true,
+    sparse: true,
+  },
+  category: {
+    type: String,
+    // enum: categories.map(category => category.value),
+  },
+  title: {
+    type: String,
+    trim: true,
+  },
+  cities: [
+    {
+      type: String,
+      // enum: cities.map(city => city.value),
+    },
+  ],
+  company: {
+    type: String,
+    trim: true,
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
+  hot: Boolean,
+  url: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 7 * 24 * 60 * 60,
+  },
+});
+
+vacancySchema.static('insertVacancies', async function(
+  this: IVacancyModel,
+  vacancies: IDOUResponse[],
+) {
+  const vacanciesIds = vacancies.map(vac => vac.id);
+  const existingVacancies = await this.find({
+    id: { $in: vacanciesIds },
+  }).exec();
+  const notExistingVacancies = differenceBy(
+    uniqBy(vacancies, 'id'),
+    existingVacancies,
+    'id',
+  );
+
+  return this.insertMany(notExistingVacancies, { ordered: false }).catch(err =>
+    console.log(JSON.stringify(err, null, 2)),
+  );
+});
