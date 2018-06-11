@@ -44,10 +44,4 @@ export const getVacanciesTemplate = (tokens: IDOUTokens) => (
       vacancies,
       params,
     }))
-    .catch(err => {
-      console.log(err.message);
-      return {
-        vacancies: [],
-        params,
-      } as IDOUResponse;
-    });
+    .catch(err => console.log(err.message));
