@@ -5,7 +5,7 @@ import { IDOUResponse, IVacancyTree } from '../interfaces';
 export class VacancyTree {
   private _vacancyTree: IVacancyTree;
 
-  constructor(vacancies: Array<IDOUResponse>) {
+  constructor(vacancies: Array<void | IDOUResponse>) {
     this._vacancyTree = this.parseToTree(vacancies);
   }
 
@@ -19,15 +19,18 @@ export class VacancyTree {
     return diff;
   }
 
-  private parseToTree(vacancies: Array<IDOUResponse>): IVacancyTree {
-    return vacancies.reduce<IVacancyTree>((tree, { params, vacancies }) => {
-      const { category, city } = params;
-
-      if (!tree[category]) tree[category] = {};
-      if (!tree[category][city]) tree[category][city] = [];
-      tree[category][city] = vacancies;
-
-      return tree;
+  private parseToTree(vacancies: Array<void | IDOUResponse>): IVacancyTree {
+    return vacancies.reduce<IVacancyTree>((tree, resp) => {
+      if (resp) {
+        const { vacancies, params } = resp;
+        const { category, city } = params;
+  
+        if (!tree[category]) tree[category] = {};
+        if (!tree[category][city]) tree[category][city] = [];
+        tree[category][city] = vacancies;
+  
+        return tree;
+      }
     }, {});
   }
 

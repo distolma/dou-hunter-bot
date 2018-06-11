@@ -15,7 +15,7 @@ export const createVacanciesRequests = async (
   inquiries: IVacanciesInquiries,
 ) => {
   const tokens = await getTokens();
-  const requests: Array<Promise<IDOUResponse>> = [];
+  const requests: Array<Promise<void | IDOUResponse>> = [];
   const getVacancies = getVacanciesTemplate(tokens);
 
   for (const category in inquiries) {
