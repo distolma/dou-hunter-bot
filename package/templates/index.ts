@@ -14,7 +14,7 @@ Welcome to DOU Hunter, ${user.first_name}!
 `;
 
 export const vacancyMessage = (vacancy: IVacancy) => `
-${vacancy.hot ? emoji.fire + ' ' : ''}[${vacancy.title}](${vacancy.url}) at *${
+${vacancy.hot ? emoji.fire + ' ' : ''}[${vacancy.title.replace(/[\[\]]/g, '\\$&')}](${vacancy.url}) at *${
   vacancy.company
 }*
 ${vacancy.description}
