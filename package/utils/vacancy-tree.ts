@@ -24,13 +24,12 @@ export class VacancyTree {
       if (resp) {
         const { vacancies, params } = resp;
         const { category, city } = params;
-  
+
         if (!tree[category]) tree[category] = {};
         if (!tree[category][city]) tree[category][city] = [];
         tree[category][city] = vacancies;
-  
-        return tree;
       }
+      return tree;
     }, {});
   }
 

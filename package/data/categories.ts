@@ -39,8 +39,8 @@ export const categories: Array<ICategory> = [
   { value: 'Support', title: 'Support' },
   { value: 'Technical Writer', title: 'Technical Writer' },
   { value: 'Unity', title: 'Unity' },
-  { value: 'Дизайн', title: 'Дизайн' },
-  { value: 'Маркетинг', title: 'Маркетинг' },
-  { value: 'Системный администратор', title: 'Системный администратор' },
+  // { value: 'Дизайн', title: 'Дизайн' },
+  // { value: 'Маркетинг', title: 'Маркетинг' },
+  // { value: 'Системный администратор', title: 'Системный администратор' },
   { value: 'beginners', title: 'Beginners' },
 ];
