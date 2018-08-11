@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-import { userSchema, IUserDocument, IUserModel } from './models/User';
+import { UserSchema, IUserDocument, IUserModel } from './models/User';
 import {
-  vacancySchema,
+  VacancySchema,
   IVacancyDocument,
   IVacancyModel,
 } from './models/Vacancy';
 
-mongoose.connect(process.env.DATABASE);
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 mongoose.connection.on('error', err => {
   console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
@@ -15,10 +15,10 @@ mongoose.connection.on('error', err => {
 
 export const User = mongoose.model<IUserDocument, IUserModel>(
   'User',
-  userSchema,
+  UserSchema,
 );
 
 export const Vacancy = mongoose.model<IVacancyDocument, IVacancyModel>(
   'Vacancy',
-  vacancySchema,
+  VacancySchema,
 );

@@ -16,7 +16,7 @@ export interface IVacancyModel extends Model<IVacancyDocument> {
   insertVacancies: (vacancies: IDOUResponse[]) => Promise<IVacancyDocument[]>;
 }
 
-export const vacancySchema = new Schema({
+export const VacancySchema = new Schema({
   id: {
     type: Number,
     unique: true,
@@ -46,16 +46,13 @@ export const vacancySchema = new Schema({
   },
   hot: Boolean,
   url: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: 7 * 24 * 60 * 60,
-  },
-});
+}, { timestamps: true });
 
-vacancySchema.plugin(sanitizerPlugin);
+VacancySchema.index({ createdAt: 1 }, { expires: '1w' });
 
-vacancySchema.static('insertVacancies', async function(
+VacancySchema.plugin(sanitizerPlugin);
+
+VacancySchema.static('insertVacancies', async function(
   this: IVacancyModel,
   vacancies: IDOUResponse[],
 ) {

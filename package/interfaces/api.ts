@@ -1,3 +1,5 @@
+import { IUser } from '../db/models/User';
+
 export interface IVacancy {
   id: number;
   title: string;
@@ -6,6 +8,11 @@ export interface IVacancy {
   description: string;
   hot: boolean;
   url: string;
+  category: string;
+}
+
+export interface IUserWithVacs extends IUser {
+  vacancies?: string[];
 }
 
 export interface IDOUTokens {
@@ -25,13 +32,3 @@ export interface IDOUParams {
 }
 
 export interface IDOUResponse extends IVacancy, IDOUParams {}
-
-export interface IVacancyTree {
-  [key: string]: {
-    [key: string]: IVacancy[];
-  };
-}
-
-export interface IVacanciesInquiries {
-  [key: string]: Set<string>;
-}

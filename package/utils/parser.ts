@@ -1,27 +1,28 @@
 import $ from 'cheerio';
+import escape from 'markdown-escape';
 
 import { IVacancy } from '../interfaces';
 
-export const getVacancyList = (html: string) =>
+export const getVacancyList = (html: string, category: string) =>
   Array.from($.load(html)('.l-vacancy')).map<IVacancy>(vacancy => {
     const $vacancy = $(vacancy);
 
     return {
       id: +$vacancy.find('.vacancy').attr('_id'),
-      title: $vacancy
+      title: escape($vacancy
         .find('.vt')
         .text()
-        .trim(),
+        .trim()),
       url: $vacancy.find('.vt').attr('href'),
-      company: $vacancy
+      company: escape($vacancy
         .find('.company')
         .text()
-        .trim(),
-      description: $vacancy
+        .trim()),
+      description: escape($vacancy
         .find('.sh-info')
         .text()
         .trim()
-        .replace(/\n+/, '\n'),
+        .replace(/\n+/, '\n')),
       hot: $vacancy.hasClass('__hot'),
       cities: getCities(
         $vacancy
@@ -29,6 +30,7 @@ export const getVacancyList = (html: string) =>
           .text()
           .trim(),
       ),
+      category,
     };
   });
 

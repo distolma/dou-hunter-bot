@@ -1,14 +1,14 @@
 {
   "name": "dou-hunter-bot",
   "version": "1.0.0",
-  "main": "package/index.ts",
+  "main": "package/app.ts",
   "description": "Telegram bot, which helps you to find IT vacancies on DOU.ua",
   "repository": "git@github.com:distolma/dou-hunter-bot.git",
   "author": "distolma <djmakaron2009@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/index.ts",
+    "start": "node dist/app.js",
+    "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/app.ts",
     "build": "tsc"
   },
   "engines": {
@@ -23,8 +23,8 @@
     "@types/koa-router": "^7.0.28",
     "@types/lodash": "^4.14.106",
     "@types/mongoose": "^5.0.7",
+    "@types/ms": "^0.7.30",
     "@types/node": "^9.6.2",
-    "@types/node-cron": "^1.2.0",
     "@types/node-emoji": "^1.8.0",
     "@types/node-telegram-bot-api": "^0.28.2",
     "dotenv": "^5.0.1",
@@ -44,9 +44,9 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "lodash": "^4.17.5",
+    "markdown-escape": "^1.0.2",
     "mongoose": "^5.0.12",
     "mongoose-sanitizer": "^1.0.0",
-    "node-cron": "^1.2.1",
     "node-emoji": "^1.8.1",
     "node-telegram-bot-api": "^0.30.0"
   }

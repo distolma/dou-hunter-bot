@@ -24,7 +24,7 @@ export interface IUserModel extends Model<IUserDocument> {
   updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
 }
 
-export const userSchema = new Schema({
+export const UserSchema = new Schema({
   tel_id: {
     type: Number,
     unique: true,
@@ -39,20 +39,12 @@ export const userSchema = new Schema({
     enum: ['active', 'pause', 'pending'],
     default: 'pending',
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
-userSchema.plugin(sanitizerPlugin);
+UserSchema.plugin(sanitizerPlugin);
 
 // Hooks
-userSchema.pre('save', function(this: IUserDocument) {
+UserSchema.pre('save', function(this: IUserDocument) {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
@@ -68,15 +60,15 @@ userSchema.pre('save', function(this: IUserDocument) {
 //   return map;
 // });
 
-userSchema.static('getActives', function(this: IUserModel) {
+UserSchema.static('getActives', function(this: IUserModel) {
   return this.find({ status: 'active' }).exec();
 });
 
-userSchema.static('getById', function(this: IUserModel, id: number) {
+UserSchema.static('getById', function(this: IUserModel, id: number) {
   return this.findOne({ tel_id: id }).exec();
 });
 
-userSchema.static('updateUser', function(
+UserSchema.static('updateUser', function(
   this: IUserModel,
   id: number,
   user: Partial<IUser>,
