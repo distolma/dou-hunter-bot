@@ -16,37 +16,40 @@ export interface IVacancyModel extends Model<IVacancyDocument> {
   insertVacancies: (vacancies: IDOUResponse[]) => Promise<IVacancyDocument[]>;
 }
 
-export const VacancySchema = new Schema({
-  id: {
-    type: Number,
-    unique: true,
-    sparse: true,
-  },
-  category: {
-    type: String,
-    // enum: categories.map(category => category.value),
-  },
-  title: {
-    type: String,
-    trim: true,
-  },
-  cities: [
-    {
-      type: String,
-      // enum: cities.map(city => city.value),
+export const VacancySchema = new Schema(
+  {
+    id: {
+      type: Number,
+      unique: true,
+      sparse: true,
     },
-  ],
-  company: {
-    type: String,
-    trim: true,
+    category: {
+      type: String,
+      // enum: categories.map(category => category.value),
+    },
+    title: {
+      type: String,
+      trim: true,
+    },
+    cities: [
+      {
+        type: String,
+        // enum: cities.map(city => city.value),
+      },
+    ],
+    company: {
+      type: String,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    hot: Boolean,
+    url: String,
   },
-  description: {
-    type: String,
-    trim: true,
-  },
-  hot: Boolean,
-  url: String,
-}, { timestamps: true });
+  { timestamps: true },
+);
 
 VacancySchema.index({ createdAt: 1 }, { expires: '1w' });
 

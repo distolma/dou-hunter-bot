@@ -4,7 +4,7 @@ import { vacancyMessage } from '../templates';
 export function messageDivisor(messages: IVacancy[]) {
   const MAX_CHARACTERS = 4096;
   let stringAcc: string = '';
-  
+
   return messages.reduce<string[]>((acc, message, index) => {
     const newMessage = vacancyMessage(message) + '\n';
     const tempString = stringAcc + newMessage;
@@ -21,6 +21,5 @@ export function messageDivisor(messages: IVacancy[]) {
     }
 
     return acc;
-
   }, []);
-};
+}

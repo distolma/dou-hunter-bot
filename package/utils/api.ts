@@ -2,10 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import cookie from 'cookie';
 
 import { getCSRFMiddlewareToken, getVacancyList } from './parser';
-import {
-  IDOUParams,
-  IDOUXHRResponse,
-} from '../interfaces';
+import { IDOUParams, IDOUXHRResponse } from '../interfaces';
 
 const { SOURCE_URL, XHR_URL } = process.env;
 
@@ -42,13 +39,13 @@ export class Api {
     };
 
     try {
-      const { data: { html } } = await this.client.post<IDOUXHRResponse>(
+      const { data } = await this.client.post<IDOUXHRResponse>(
         XHR_URL,
         `csrfmiddlewaretoken=${this.csrfmiddlewaretoken}`,
         { params, headers },
       );
 
-      return getVacancyList(html, params.category);
+      return getVacancyList(data.html, params.category);
     } catch (error) {
       console.log(error.message);
       return [];

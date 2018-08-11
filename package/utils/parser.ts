@@ -9,20 +9,26 @@ export const getVacancyList = (html: string, category: string) =>
 
     return {
       id: +$vacancy.find('.vacancy').attr('_id'),
-      title: escape($vacancy
-        .find('.vt')
-        .text()
-        .trim()),
+      title: escape(
+        $vacancy
+          .find('.vt')
+          .text()
+          .trim(),
+      ),
       url: $vacancy.find('.vt').attr('href'),
-      company: escape($vacancy
-        .find('.company')
-        .text()
-        .trim()),
-      description: escape($vacancy
-        .find('.sh-info')
-        .text()
-        .trim()
-        .replace(/\n+/, '\n')),
+      company: escape(
+        $vacancy
+          .find('.company')
+          .text()
+          .trim(),
+      ),
+      description: escape(
+        $vacancy
+          .find('.sh-info')
+          .text()
+          .trim()
+          .replace(/\n+/, '\n'),
+      ),
       hot: $vacancy.hasClass('__hot'),
       cities: getCities(
         $vacancy

@@ -24,22 +24,25 @@ export interface IUserModel extends Model<IUserDocument> {
   updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
 }
 
-export const UserSchema = new Schema({
-  tel_id: {
-    type: Number,
-    unique: true,
+export const UserSchema = new Schema(
+  {
+    tel_id: {
+      type: Number,
+      unique: true,
+    },
+    first_name: String,
+    last_name: String,
+    username: String,
+    city: String,
+    category: String,
+    status: {
+      type: String,
+      enum: ['active', 'pause', 'pending'],
+      default: 'pending',
+    },
   },
-  first_name: String,
-  last_name: String,
-  username: String,
-  city: String,
-  category: String,
-  status: {
-    type: String,
-    enum: ['active', 'pause', 'pending'],
-    default: 'pending',
-  },
-}, { timestamps: true });
+  { timestamps: true },
+);
 
 UserSchema.plugin(sanitizerPlugin);
 
