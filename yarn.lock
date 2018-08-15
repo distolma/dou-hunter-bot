@@ -134,10 +134,6 @@
     "@types/mongodb" "*"
     "@types/node" "*"
 
-"@types/ms@^0.7.30":
-  version "0.7.30"
-  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.30.tgz#f6c38b7ecbbf698b0bbd138315a0f0f18954f85f"
-
 "@types/node-emoji@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.0.tgz#6bc88a880cdcb3c165e2828d056db242e8829a8b"
@@ -2293,10 +2289,6 @@ map-visit@^1.0.0:
   resolved "https://registry.yarnpkg.com/map-visit/-/map-visit-1.0.0.tgz#ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
   dependencies:
     object-visit "^1.0.0"
-
-markdown-escape@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/markdown-escape/-/markdown-escape-1.0.2.tgz#7184ae24554c49e84b82fd5648fe2a53d1f91b08"
 
 media-typer@0.3.0:
   version "0.3.0"
