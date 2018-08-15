@@ -1,4 +1,4 @@
-import { IUser } from '../db/models/User';
+import { IUser, IUserDocument } from '../db/models/User';
 
 export interface IVacancy {
   id: number;
@@ -11,7 +11,7 @@ export interface IVacancy {
   category: string;
 }
 
-export interface IUserWithVacs extends IUser {
+export interface IUserWithVacs extends IUserDocument {
   vacancies?: string[];
 }
 
