@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import cookie from 'cookie';
 
-import { getCSRFMiddlewareToken, getVacancyList } from './parser';
+import { Parser } from './parser';
 import { IDOUParams, IDOUXHRResponse } from '../interfaces';
 
 const { SOURCE_URL, XHR_URL } = process.env;
@@ -18,7 +18,9 @@ export class Api {
   public async getTokens() {
     const response = await this.client.get<string>(SOURCE_URL);
     const { csrftoken } = cookie.parse(response.headers['set-cookie'][0]);
-    const csrfmiddlewaretoken = getCSRFMiddlewareToken(response.data);
+    const csrfmiddlewaretoken = Parser.create(
+      response.data,
+    ).getCSRFMiddlewareToken();
 
     this.csrftoken = csrftoken;
     this.csrfmiddlewaretoken = csrfmiddlewaretoken;
@@ -45,7 +47,7 @@ export class Api {
         { params, headers },
       );
 
-      return getVacancyList(data.html, params.category);
+      return Parser.create(data.html).getVacancies(params.category);
     } catch (error) {
       console.log(error.message);
       return [];
