@@ -1,5 +1,3 @@
-import { IUser, IUserDocument } from '../db/models/User';
-
 export interface IVacancy {
   id: number;
   title: string;
@@ -9,10 +7,6 @@ export interface IVacancy {
   hot: boolean;
   url: string;
   category: string;
-}
-
-export interface IUserWithVacs extends IUserDocument {
-  vacancies?: string[];
 }
 
 export interface IDOUTokens {
