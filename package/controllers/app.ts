@@ -3,6 +3,7 @@ import { uniqWith, isEqual, flatten } from 'lodash';
 
 import { bot } from '../bot';
 import { Api } from '../utils/api';
+import { notifyUsers } from '../utils/notify-users';
 import { concatenate } from '../utils/concatenate';
 import { IUserDocument } from '../db/models/User';
 import { Vacancy } from '../db';
@@ -26,6 +27,8 @@ export async function hunt(ctx: IRouterContext) {
   const brandNewVacancies = await Vacancy.insertVacancies(vacancies);
 
   const usersWithMessages = concatenate(activeUsers, brandNewVacancies);
+
+  notifyUsers(usersWithMessages);
 
   ctx.body = usersWithMessages;
   ctx.status = 200;
