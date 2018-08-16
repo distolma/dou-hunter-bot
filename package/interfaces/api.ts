@@ -6,6 +6,7 @@ export interface IVacancy {
   description: string;
   hot: boolean;
   url: string;
+  category: string;
 }
 
 export interface IDOUTokens {
@@ -24,17 +25,4 @@ export interface IDOUParams {
   category: string;
 }
 
-export interface IDOUResponse {
-  vacancies: IVacancy[];
-  params: IDOUParams;
-}
-
-export interface IVacancyTree {
-  [key: string]: {
-    [key: string]: IVacancy[];
-  };
-}
-
-export interface IVacanciesInquiries {
-  [key: string]: Set<string>;
-}
+export interface IDOUResponse extends IVacancy, IDOUParams {}

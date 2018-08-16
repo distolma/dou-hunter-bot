@@ -1,11 +1,11 @@
-import { bot } from './bot';
+import { bot } from '../bot';
 import {
   onStart,
   onPing,
   onPause,
   onResume,
   onConfig,
-} from './controllers/app';
+} from '../controllers/bot';
 
 bot.onText(/\/start/, onStart);
 bot.onText(/\/ping/, onPing);

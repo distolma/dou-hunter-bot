@@ -1,47 +1,74 @@
-import $ from 'cheerio';
+import cheerio from 'cheerio';
 
 import { IVacancy } from '../interfaces';
 
-export const getVacancyList = (html: string) =>
-  Array.from($.load(html)('.l-vacancy')).map<IVacancy>(vacancy => {
-    const $vacancy = $(vacancy);
+const SELECTORS = {
+  VACANCIES_LIST: '.l-vacancy',
+  VACANCY: '.vacancy',
+  COMPANY: '.company',
+  INFO: '.sh-info',
+  CITIES: '.cities',
+  TITLE: '.vt',
+  SCRIPT: 'script',
+};
 
-    return {
-      id: +$vacancy.find('.vacancy').attr('_id'),
-      title: $vacancy
-        .find('.vt')
-        .text()
-        .trim(),
-      url: $vacancy.find('.vt').attr('href'),
-      company: $vacancy
-        .find('.company')
-        .text()
-        .trim(),
-      description: $vacancy
-        .find('.sh-info')
-        .text()
-        .trim()
-        .replace(/\n+/, '\n'),
-      hot: $vacancy.hasClass('__hot'),
-      cities: getCities(
-        $vacancy
-          .find('.cities')
-          .text()
-          .trim(),
-      ),
-    };
-  });
+export class Parser {
+  private $: CheerioStatic = null;
 
-export const getCSRFMiddlewareToken = (html: string) =>
-  Array.from($.load(html)('script'))
-    .filter(script => script.children.length)
-    .filter(
-      script => script.children[0].data.search('window.CSRF_TOKEN = ') !== -1,
-    )
-    .reduce(
-      (_, script) =>
-        script.children[0].data.match(/window.CSRF_TOKEN = "(.+)"/)[1],
-      '',
-    );
+  public static create(html: string) {
+    return new Parser(html);
+  }
 
-const getCities = (cities: string) => (cities.length ? cities.split(', ') : []);
+  public static getCities(cities: string) {
+    return cities.length ? cities.split(', ') : [];
+  }
+
+  constructor(html: string) {
+    this.$ = cheerio.load(html);
+  }
+
+  private getTrimText(context: Cheerio, selector: string) {
+    return context
+      .find(selector)
+      .text()
+      .trim();
+  }
+
+  public getVacancies(category: string) {
+    return this.$(SELECTORS.VACANCIES_LIST)
+      .toArray()
+      .map<IVacancy>(vacancy => {
+        const $vacancy = this.$(vacancy);
+
+        return {
+          id: +$vacancy.find(SELECTORS.VACANCY).attr('_id'),
+          title: this.getTrimText($vacancy, SELECTORS.TITLE),
+          url: $vacancy.find(SELECTORS.TITLE).attr('href'),
+          company: this.getTrimText($vacancy, SELECTORS.COMPANY),
+          description: this.getTrimText($vacancy, SELECTORS.INFO).replace(
+            /\n/g,
+            '',
+          ),
+          hot: $vacancy.hasClass('__hot'),
+          cities: Parser.getCities(
+            this.getTrimText($vacancy, SELECTORS.CITIES),
+          ),
+          category,
+        };
+      });
+  }
+
+  public getCSRFMiddlewareToken() {
+    return this.$(SELECTORS.SCRIPT)
+      .toArray()
+      .reduce((acc, scr) => {
+        if (
+          scr.children.length &&
+          scr.children[0].data.search('window.CSRF_TOKEN = ') !== -1
+        ) {
+          return scr.children[0].data.match(/window.CSRF_TOKEN = "(.+)"/)[1];
+        }
+        return acc;
+      }, '');
+  }
+}
