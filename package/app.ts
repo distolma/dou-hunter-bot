@@ -18,3 +18,7 @@ const server = app.listen(+PORT, () => {
 
   cron();
 });
+
+process.on('unhandledRejection', reason => {
+  console.log('Unhandled Rejection at:', reason.stack || reason);
+});
