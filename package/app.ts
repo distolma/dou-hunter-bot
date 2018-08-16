@@ -3,6 +3,7 @@ import bodyParser from 'koa-bodyparser';
 import { AddressInfo } from 'net';
 
 import { routes } from './routes/app';
+import './routes/bot';
 
 const { PORT = 80 } = process.env;
 const app = new Koa();
