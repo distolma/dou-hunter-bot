@@ -9,8 +9,6 @@ import { Vacancy } from '../db';
 import { IDOUResponse } from '../interfaces';
 
 export async function hunt(ctx: IRouterContext) {
-  console.log('hunt');
-  
   const api: Api = ctx.state.api;
   const activeUsers: IUserDocument[] = ctx.state.users;
 
