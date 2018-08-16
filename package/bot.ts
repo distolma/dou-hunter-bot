@@ -6,7 +6,7 @@ export let bot: TelegramBot;
 
 if (NODE_ENV === 'production') {
   bot = new TelegramBot(BOT_TOKEN);
-  bot.setWebHook(HEROKU_URL + BOT_TOKEN);
+  bot.setWebHook(`${HEROKU_URL}/bot${BOT_TOKEN}`);
 } else {
   bot = new TelegramBot(BOT_TOKEN, { polling: true });
 }

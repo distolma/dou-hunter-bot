@@ -8,6 +8,6 @@ const router = new Router();
 const { BOT_TOKEN } = process.env;
 
 router.get('/hunt', tokens, activeUsers, hunt);
-router.post(`/${BOT_TOKEN}`, botWebhook);
+router.post(`/bot${BOT_TOKEN}`, botWebhook);
 
 export const routes = router.routes();
