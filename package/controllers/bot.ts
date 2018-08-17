@@ -36,12 +36,18 @@ export const onPing = async (message: Message) => {
 };
 
 export const onPause = async (message: Message) => {
-  await User.findOneAndUpdate({ tel_id: message.from.id }, { status: 'pause' }).exec();
+  await User.findOneAndUpdate(
+    { tel_id: message.from.id },
+    { status: 'pause' },
+  ).exec();
   bot.sendMessage(message.from.id, 'Paused!');
 };
 
 export const onResume = async (message: Message) => {
-  await User.findOneAndUpdate({ tel_id: message.from.id }, { status: 'active' }).exec();
+  await User.findOneAndUpdate(
+    { tel_id: message.from.id },
+    { status: 'active' },
+  ).exec();
   bot.sendMessage(message.from.id, 'Activated!');
 };
 
@@ -75,7 +81,10 @@ const configureUser = async (id: number) => {
     await User.findOneAndUpdate({ tel_id: id }, { city: city.value }).exec();
 
     const category = await getConfig<ICategory>(id, categories);
-    await User.findOneAndUpdate({ tel_id: id }, { category: category.value }).exec();;
+    await User.findOneAndUpdate(
+      { tel_id: id },
+      { category: category.value },
+    ).exec();
 
     User.updateUser(id, { status: 'active' });
     bot.sendMessage(id, 'we are ready! ' + emoji.v);

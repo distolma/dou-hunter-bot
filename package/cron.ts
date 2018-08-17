@@ -1,9 +1,9 @@
 import axios from 'axios';
 import ms from 'ms';
 
-const client = axios.create({
-  baseURL: `${process.env.HEROKU_URL}`,
-});
+import { BASE_URL } from './utils/config';
+
+const client = axios.create({ baseURL: BASE_URL });
 
 export function cron() {
   client.get('/hunt');

@@ -1,5 +1,6 @@
 import { IRouterContext } from 'koa-router';
 import { uniqWith, isEqual, flatten } from 'lodash';
+import { Update } from 'node-telegram-bot-api';
 
 import { bot } from '../bot';
 import { Api } from '../utils/api';
@@ -32,6 +33,6 @@ export async function hunt(ctx: IRouterContext) {
 }
 
 export async function botWebhook(ctx: IRouterContext) {
-  bot.processUpdate(ctx.request.body);
+  bot.processUpdate(ctx.request.body as Update);
   ctx.status = 200;
 }

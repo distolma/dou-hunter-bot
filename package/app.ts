@@ -6,13 +6,13 @@ import { routes } from './routes/app';
 import { cron } from './cron';
 import './routes/bot';
 
-const { PORT = 80 } = process.env;
+const { PORT } = process.env;
 const app = new Koa();
 
 app.use(bodyParser());
 app.use(routes);
 
-const server = app.listen(+PORT, () => {
+const server = app.listen(PORT || 80, () => {
   const { address, port } = server.address() as AddressInfo;
   console.log(`Web server started at ${address}:${port}`);
 
