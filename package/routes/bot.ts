@@ -1,4 +1,5 @@
 import { bot } from '../bot';
+import { getUser } from '../middlewares/get-user';
 import {
   onStart,
   onPing,
@@ -7,7 +8,7 @@ import {
   onConfig,
 } from '../controllers/bot';
 
-bot.hears(/\/start/, onStart);
+bot.start(getUser, onStart);
 bot.hears(/\/ping/, onPing);
 bot.hears(/\/pause/, onPause);
 bot.hears(/\/resume/, onResume);

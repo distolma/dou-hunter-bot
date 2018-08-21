@@ -1,3 +1,5 @@
+import { ContextMessageUpdate } from "telegraf";
+
 export interface IVacancy {
   id: number;
   title: string;
@@ -29,3 +31,8 @@ export interface IDOUParams {
 }
 
 export interface IDOUResponse extends IVacancy, IDOUParams {}
+
+export interface IBotContext extends ContextMessageUpdate {
+  state: any;
+  session: any;
+}

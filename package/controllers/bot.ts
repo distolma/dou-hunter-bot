@@ -1,7 +1,7 @@
-import { Message } from 'node-telegram-bot-api';
 import { emoji } from 'node-emoji';
 
 import { bot } from '../bot';
+import { IBotContext } from '../interfaces'
 import {
   welcomeMessage,
   welcomeMessageToNew,
@@ -10,59 +10,56 @@ import {
 import { Cities } from '../dictionaries/cities';
 import { Categories } from '../dictionaries/categories';
 import { User } from '../db';
-import { ContextMessageUpdate } from 'telegraf';
 
-export const onStart = async (message: ContextMessageUpdate) => {
-  const { id } = message.chat;
+export const onStart = async (ctx: IBotContext) => {
+  const { id } = ctx.from;
+  let { user } = ctx.state;
 
-  let user = await User.findOne({ tel_id: id }).exec();
   if (!user) {
-    user = await User.create({ tel_id: id, ...message.from });
-    bot.telegram.sendMessage(id, welcomeMessageToNew(user));
+    user = await User.create({ tel_id: id, ...ctx.from });
+    await ctx.reply(welcomeMessageToNew(user));
 
-    configureUser(id);
+    configureUser(ctx);
 
     return;
   }
 
   if (user.status === 'pending') {
-    configureUser(id);
+    configureUser(ctx);
   }
 
-  bot.telegram.sendMessage(id, welcomeMessage(user));
+  return ctx.reply(welcomeMessage(user));
 };
 
-export const onPing = async (message: ContextMessageUpdate) => {
-  bot.telegram.sendMessage(message.from.id, 'pong');
+export const onPing = (ctx: IBotContext) => {
+  return ctx.reply('pong');
 };
 
-export const onPause = async (message: ContextMessageUpdate) => {
+export const onPause = async (ctx: IBotContext) => {
   await User.findOneAndUpdate(
-    { tel_id: message.from.id },
+    { tel_id: ctx.from.id },
     { status: 'pause' },
   ).exec();
-  bot.telegram.sendMessage(message.from.id, 'Paused!');
+  ctx.reply('Paused!');
 };
 
-export const onResume = async (message: ContextMessageUpdate) => {
+export const onResume = async (ctx: IBotContext) => {
   await User.findOneAndUpdate(
-    { tel_id: message.from.id },
+    { tel_id: ctx.from.id },
     { status: 'active' },
   ).exec();
-  bot.telegram.sendMessage(message.from.id, 'Activated!');
+  ctx.reply('Activated!');
 };
 
-export const onConfig = async (message: ContextMessageUpdate) => {
-  const { id } = message.from;
-
-  configureUser(id);
+export const onConfig = async (ctx: IBotContext) => {
+  configureUser(ctx);
 };
 
-const getConfig = <T>(id: number, list: T) =>
+const getConfig = <T>(ctx: IBotContext, list: T) =>
   new Promise<string>((resolve, reject) => {
-    bot.telegram.sendMessage(id, setConfigList(list));
-    bot.on('message', function messageReceiver(msg: ContextMessageUpdate) {
-      if (msg.from.id === id) {
+    ctx.reply(setConfigList(list));
+    bot.on('message', function messageReceiver(msg: IBotContext) {
+      if (msg.from.id === ctx.from.id) {
         // bot.removeListener('message', messageReceiver);
         // if (msg.text && /\/\d+/.test(msg.message.text)) {
         //   const index = +msg.message.text.substr(1) - 1;
@@ -72,24 +69,25 @@ const getConfig = <T>(id: number, list: T) =>
         // } else {
         //   reject();
         // }
-        reject()
+        reject();
       }
     });
   });
 
-const configureUser = async (id: number) => {
+const configureUser = async (ctx: IBotContext) => {
+  const { id } = ctx.from;
   await User.updateUser(id, { status: 'pending' });
 
   try {
-    const city = await getConfig<typeof Cities>(id, Cities);
+    const city = await getConfig<typeof Cities>(ctx, Cities);
     await User.findOneAndUpdate({ tel_id: id }, { city }).exec();
 
-    const category = await getConfig<typeof Categories>(id, Categories);
+    const category = await getConfig<typeof Categories>(ctx, Categories);
     await User.findOneAndUpdate({ tel_id: id }, { category }).exec();
 
     User.updateUser(id, { status: 'active' });
-    bot.telegram.sendMessage(id, 'we are ready! ' + emoji.v);
+    return ctx.reply('we are ready! ' + emoji.v);
   } catch (error) {
-    bot.telegram.sendMessage(id, 'wrong' + emoji.smirk);
+    return ctx.reply('wrong' + emoji.smirk);
   }
 };

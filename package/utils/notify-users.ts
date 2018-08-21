@@ -1,3 +1,5 @@
+import { ExtraEditMessage } from 'telegraf/typings/telegram-types';
+
 import { IVacancy } from '../interfaces';
 import { bot } from '../bot';
 import { IUserDocument, IUser } from '../db/models/User';
@@ -18,9 +20,9 @@ export async function notifyUsers(
     for (const message of vacancies) {
       try {
         await bot.telegram.sendMessage(user.tel_id, message, {
-          // parse_mode: 'HTML',
-          // disable_web_page_preview: true,
-        });
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        } as ExtraEditMessage);
       } catch (error) {
         console.log(error.message);
         break;

@@ -19,8 +19,8 @@ export interface IUserDocument extends IUser, Document {}
 
 export interface IUserModel extends Model<IUserDocument> {
   // getVacanciesInquiry(): Promise<IVacanciesInquiries>;
-  getActives(): Promise<Array<IUserDocument>>;
-  getById(id: number): Promise<IUserDocument>;
+  // getActives(): Promise<Array<IUserDocument>>;
+  // getById(id: number): Promise<IUserDocument>;
   updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
 }
 
@@ -46,10 +46,10 @@ export const UserSchema = new Schema(
 
 UserSchema.plugin(sanitizerPlugin);
 
-// Hooks
-UserSchema.pre('save', function(this: IUserDocument) {
-  this.update({}, { $set: { updatedAt: Date.now() } });
-});
+// // Hooks
+// UserSchema.pre('save', function(this: IUserDocument) {
+//   this.update({}, { $set: { updatedAt: Date.now() } });
+// });
 
 // userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
 //   const map = {};
@@ -63,13 +63,13 @@ UserSchema.pre('save', function(this: IUserDocument) {
 //   return map;
 // });
 
-UserSchema.static('getActives', function(this: IUserModel) {
-  return this.find({ status: 'active' }).exec();
-});
+// UserSchema.static('getActives', function(this: IUserModel) {
+//   return this.find({ status: 'active' }).exec();
+// });
 
-UserSchema.static('getById', function(this: IUserModel, id: number) {
-  return this.findOne({ tel_id: id }).exec();
-});
+// UserSchema.static('getById', function(this: IUserModel, id: number) {
+//   return this.findOne({ tel_id: id }).exec();
+// });
 
 UserSchema.static('updateUser', function(
   this: IUserModel,
