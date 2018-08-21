@@ -7,8 +7,8 @@ import {
   welcomeMessageToNew,
   setConfigList,
 } from '../templates';
-import { cities, ICity } from '../data/cities';
-import { categories, ICategory } from '../data/categories';
+import { Cities } from '../dictionaries/cities';
+import { Categories } from '../dictionaries/categories';
 import { User } from '../db';
 
 export const onStart = async (message: Message) => {
@@ -57,8 +57,8 @@ export const onConfig = async (message: Message) => {
   configureUser(id);
 };
 
-const getConfig = <T extends ICity>(id: number, list: T[]) =>
-  new Promise<T>((resolve, reject) => {
+const getConfig = <T>(id: number, list: T) =>
+  new Promise<string>((resolve, reject) => {
     bot.sendMessage(id, setConfigList(list));
     bot.on('message', function messageReceiver(msg: Message) {
       if (msg.from.id === id) {
@@ -77,14 +77,11 @@ const configureUser = async (id: number) => {
   await User.updateUser(id, { status: 'pending' });
 
   try {
-    const city = await getConfig<ICity>(id, cities);
-    await User.findOneAndUpdate({ tel_id: id }, { city: city.value }).exec();
+    const city = await getConfig<typeof Cities>(id, Cities);
+    await User.findOneAndUpdate({ tel_id: id }, { city }).exec();
 
-    const category = await getConfig<ICategory>(id, categories);
-    await User.findOneAndUpdate(
-      { tel_id: id },
-      { category: category.value },
-    ).exec();
+    const category = await getConfig<typeof Categories>(id, Categories);
+    await User.findOneAndUpdate({ tel_id: id }, { category }).exec();
 
     User.updateUser(id, { status: 'active' });
     bot.sendMessage(id, 'we are ready! ' + emoji.v);

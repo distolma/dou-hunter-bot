@@ -3,8 +3,8 @@ import sanitizerPlugin from 'mongoose-sanitizer';
 import { differenceBy, uniqBy } from 'lodash';
 
 import { IVacancy, IDOUResponse } from '../../interfaces';
-// import { categories } from '../../data/categories';
-// import { cities } from '../../data/cities';
+import { Categories } from '../../dictionaries/categories';
+import { Cities } from '../../dictionaries/cities';
 
 export interface IVacancyDocument extends IVacancy, Document {
   id: any;
@@ -25,7 +25,7 @@ export const VacancySchema = new Schema(
     },
     category: {
       type: String,
-      // enum: categories.map(category => category.value),
+      enum: Object.keys(Categories),
     },
     title: {
       type: String,
@@ -34,7 +34,7 @@ export const VacancySchema = new Schema(
     cities: [
       {
         type: String,
-        // enum: cities.map(city => city.value),
+        enum: Object.keys(Cities),
       },
     ],
     company: {

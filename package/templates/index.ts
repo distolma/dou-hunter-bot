@@ -2,8 +2,6 @@ import { emoji } from 'node-emoji';
 
 import { IUser } from '../db/models/User';
 import { IVacancy } from '../interfaces';
-import { ICategory } from '../data/categories';
-import { ICity } from '../data/cities';
 
 export const welcomeMessage = (user: IUser) => `
 Hi, ${user.first_name}!
@@ -20,5 +18,7 @@ ${vacancy.hot ? emoji.fire + ' ' : ''}<a href="${vacancy.url}">${
 ${vacancy.description}
 `;
 
-export const setConfigList = (cities: ICategory[] | ICity[]) =>
-  cities.map((city, index) => `/${index + 1} - ${city.title}`).join('\n');
+export const setConfigList = (emun: Object) =>
+  Object.keys(emun)
+    .map((item, index) => `/${index + 1} - ${item}`)
+    .join('\n');
