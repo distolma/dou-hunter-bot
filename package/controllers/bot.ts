@@ -64,8 +64,10 @@ const getConfig = <T>(id: number, list: T) =>
       if (msg.from.id === id) {
         bot.removeListener('message', messageReceiver);
         if (msg.text && /\/\d+/.test(msg.text)) {
-          const selectId = +msg.text.substr(1) - 1;
-          resolve(list[selectId]);
+          const index = +msg.text.substr(1) - 1;
+          const selectId = Object.keys(list)[index]
+
+          list[selectId] ? resolve(list[selectId]) : reject();
         } else {
           reject();
         }
