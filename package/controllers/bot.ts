@@ -10,14 +10,15 @@ import {
 import { Cities } from '../dictionaries/cities';
 import { Categories } from '../dictionaries/categories';
 import { User } from '../db';
+import { ContextMessageUpdate } from 'telegraf';
 
-export const onStart = async (message: Message) => {
+export const onStart = async (message: ContextMessageUpdate) => {
   const { id } = message.chat;
 
   let user = await User.findOne({ tel_id: id }).exec();
   if (!user) {
     user = await User.create({ tel_id: id, ...message.from });
-    bot.sendMessage(id, welcomeMessageToNew(user));
+    bot.telegram.sendMessage(id, welcomeMessageToNew(user));
 
     configureUser(id);
 
@@ -28,30 +29,30 @@ export const onStart = async (message: Message) => {
     configureUser(id);
   }
 
-  bot.sendMessage(id, welcomeMessage(user));
+  bot.telegram.sendMessage(id, welcomeMessage(user));
 };
 
-export const onPing = async (message: Message) => {
-  bot.sendMessage(message.from.id, 'pong');
+export const onPing = async (message: ContextMessageUpdate) => {
+  bot.telegram.sendMessage(message.from.id, 'pong');
 };
 
-export const onPause = async (message: Message) => {
+export const onPause = async (message: ContextMessageUpdate) => {
   await User.findOneAndUpdate(
     { tel_id: message.from.id },
     { status: 'pause' },
   ).exec();
-  bot.sendMessage(message.from.id, 'Paused!');
+  bot.telegram.sendMessage(message.from.id, 'Paused!');
 };
 
-export const onResume = async (message: Message) => {
+export const onResume = async (message: ContextMessageUpdate) => {
   await User.findOneAndUpdate(
     { tel_id: message.from.id },
     { status: 'active' },
   ).exec();
-  bot.sendMessage(message.from.id, 'Activated!');
+  bot.telegram.sendMessage(message.from.id, 'Activated!');
 };
 
-export const onConfig = async (message: Message) => {
+export const onConfig = async (message: ContextMessageUpdate) => {
   const { id } = message.from;
 
   configureUser(id);
@@ -59,18 +60,19 @@ export const onConfig = async (message: Message) => {
 
 const getConfig = <T>(id: number, list: T) =>
   new Promise<string>((resolve, reject) => {
-    bot.sendMessage(id, setConfigList(list));
-    bot.on('message', function messageReceiver(msg: Message) {
+    bot.telegram.sendMessage(id, setConfigList(list));
+    bot.on('message', function messageReceiver(msg: ContextMessageUpdate) {
       if (msg.from.id === id) {
-        bot.removeListener('message', messageReceiver);
-        if (msg.text && /\/\d+/.test(msg.text)) {
-          const index = +msg.text.substr(1) - 1;
-          const selectId = Object.keys(list)[index]
+        // bot.removeListener('message', messageReceiver);
+        // if (msg.text && /\/\d+/.test(msg.message.text)) {
+        //   const index = +msg.message.text.substr(1) - 1;
+        //   const selectId = Object.keys(list)[index];
 
-          list[selectId] ? resolve(list[selectId]) : reject();
-        } else {
-          reject();
-        }
+        //   list[selectId] ? resolve(list[selectId]) : reject();
+        // } else {
+        //   reject();
+        // }
+        reject()
       }
     });
   });
@@ -86,8 +88,8 @@ const configureUser = async (id: number) => {
     await User.findOneAndUpdate({ tel_id: id }, { category }).exec();
 
     User.updateUser(id, { status: 'active' });
-    bot.sendMessage(id, 'we are ready! ' + emoji.v);
+    bot.telegram.sendMessage(id, 'we are ready! ' + emoji.v);
   } catch (error) {
-    bot.sendMessage(id, 'wrong' + emoji.smirk);
+    bot.telegram.sendMessage(id, 'wrong' + emoji.smirk);
   }
 };

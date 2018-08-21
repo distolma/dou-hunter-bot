@@ -1,14 +1,13 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from 'telegraf';
 
 const { BOT_TOKEN, NODE_ENV, HEROKU_URL } = process.env;
 
-export let bot: TelegramBot;
+export let bot = new TelegramBot(BOT_TOKEN);
 
 if (NODE_ENV === 'production') {
-  bot = new TelegramBot(BOT_TOKEN);
-  bot.setWebHook(`${HEROKU_URL}/bot${BOT_TOKEN}`);
+  bot.telegram.setWebhook(`${HEROKU_URL}/bot${BOT_TOKEN}`);
 } else {
-  bot = new TelegramBot(BOT_TOKEN, { polling: true });
+  bot.startPolling();
 }
 
 console.log('Bot server started in the ' + NODE_ENV + ' mode');

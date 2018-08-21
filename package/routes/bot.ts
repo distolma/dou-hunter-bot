@@ -7,11 +7,11 @@ import {
   onConfig,
 } from '../controllers/bot';
 
-bot.onText(/\/start/, onStart);
-bot.onText(/\/ping/, onPing);
-bot.onText(/\/pause/, onPause);
-bot.onText(/\/resume/, onResume);
-bot.onText(/\/config/, onConfig);
+bot.hears(/\/start/, onStart);
+bot.hears(/\/ping/, onPing);
+bot.hears(/\/pause/, onPause);
+bot.hears(/\/resume/, onResume);
+bot.hears(/\/config/, onConfig);
 // bot.onText(/\/stop/, onPing);
 // bot.onText(/\/info/, onPing);
 // bot.onText(/\/help/, onPing);

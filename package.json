@@ -46,6 +46,8 @@
     "mongoose-sanitizer": "^1.0.0",
     "ms": "^2.1.1",
     "node-emoji": "^1.8.1",
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "telegraf": "^3.22.2",
+    "telegraf-session-mongo": "^1.1.0"
   }
 }

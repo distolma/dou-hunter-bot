@@ -17,9 +17,9 @@ export async function notifyUsers(
 
     for (const message of vacancies) {
       try {
-        await bot.sendMessage(user.tel_id, message, {
-          parse_mode: 'HTML',
-          disable_web_page_preview: true,
+        await bot.telegram.sendMessage(user.tel_id, message, {
+          // parse_mode: 'HTML',
+          // disable_web_page_preview: true,
         });
       } catch (error) {
         console.log(error.message);
