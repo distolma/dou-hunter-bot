@@ -20,6 +20,6 @@ export const Cities = {
   Zhytomyr: 'Zhytomyr',
   Kherson: 'Kherson',
   Vinnytsia: 'Vinnytsia',
-  remote: 'Remote',
-  relocation: 'Relocation',
+  Remote: 'remote',
+  Relocation: 'relocation',
 };

@@ -23,6 +23,9 @@ export interface IDOUXHRResponse {
 export interface IDOUParams {
   city: string;
   category: string;
+  remote?: boolean;
+  relocation?: boolean;
+  beginners?: boolean;
 }
 
 export interface IDOUResponse extends IVacancy, IDOUParams {}

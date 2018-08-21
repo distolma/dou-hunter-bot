@@ -3,6 +3,8 @@ import cookie from 'cookie';
 
 import { Parser } from './parser';
 import { IDOUParams, IDOUXHRResponse } from '../interfaces';
+import { Categories } from '../dictionaries/categories';
+import { Cities } from '../dictionaries/cities';
 
 const { SOURCE_URL, XHR_URL } = process.env;
 
@@ -13,6 +15,28 @@ export class Api {
 
   constructor() {
     this.client = axios.create();
+  }
+
+  private mapParams(params: IDOUParams): IDOUParams {
+    switch (true) {
+      case (params.category === Categories.Beginners):
+        delete params.category;
+        params.beginners = true;
+        return params;
+
+      case (params.city === Cities.Remote):
+        delete params.city;
+        params.remote = true;
+        return params;
+
+      case (params.city === Cities.Relocation):
+        delete params.city;
+        params.relocation = true;
+        return params;
+
+      default:
+        return params;
+    }
   }
 
   public async getTokens() {
@@ -30,6 +54,8 @@ export class Api {
     if (!this.csrfmiddlewaretoken) {
       return [];
     }
+
+    params = this.mapParams(params);
 
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',

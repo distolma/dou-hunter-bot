@@ -37,5 +37,5 @@ export const Categories = {
   Дизайн: 'Дизайн',
   Маркетинг: 'Маркетинг',
   'Системный администратор': 'Системный администратор',
-  beginners: 'Beginners',
+  Beginners: 'beginners',
 };
