@@ -1,7 +1,6 @@
 import { emoji } from 'node-emoji';
 
-import { IUser } from '../db/models/User';
-import { IVacancy } from '../interfaces';
+import { IVacancy, IUser } from '../interfaces';
 
 export const welcomeMessage = (user: IUser) => `
 Hi, ${user.first_name}!

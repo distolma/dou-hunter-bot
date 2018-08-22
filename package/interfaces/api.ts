@@ -1,4 +1,6 @@
-import { ContextMessageUpdate } from "telegraf";
+import { ContextMessageUpdate } from 'telegraf';
+
+import { IUserDocument } from '../db/models/User';
 
 export interface IVacancy {
   id: number;
@@ -9,6 +11,18 @@ export interface IVacancy {
   hot: boolean;
   url: string;
   category: string;
+}
+
+export interface IUser {
+  tel_id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  city?: string;
+  category?: string;
+  status: 'active' | 'pause' | 'pending';
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface IDOUTokens {
@@ -33,6 +47,7 @@ export interface IDOUParams {
 export interface IDOUResponse extends IVacancy, IDOUParams {}
 
 export interface IBotContext extends ContextMessageUpdate {
-  state: any;
-  session: any;
+  state: {
+    user: IUserDocument;
+  };
 }

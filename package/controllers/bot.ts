@@ -1,7 +1,7 @@
 import { emoji } from 'node-emoji';
 
 import { bot } from '../bot';
-import { IBotContext } from '../interfaces'
+import { IBotContext } from '../interfaces';
 import {
   welcomeMessage,
   welcomeMessageToNew,
@@ -36,18 +36,12 @@ export const onPing = (ctx: IBotContext) => {
 };
 
 export const onPause = async (ctx: IBotContext) => {
-  await User.findOneAndUpdate(
-    { tel_id: ctx.from.id },
-    { status: 'pause' },
-  ).exec();
+  await User.pause(ctx.from.id);
   ctx.reply('Paused!');
 };
 
 export const onResume = async (ctx: IBotContext) => {
-  await User.findOneAndUpdate(
-    { tel_id: ctx.from.id },
-    { status: 'active' },
-  ).exec();
+  await User.active(ctx.from.id);
   ctx.reply('Activated!');
 };
 
@@ -59,18 +53,17 @@ const getConfig = <T>(ctx: IBotContext, list: T) =>
   new Promise<string>((resolve, reject) => {
     ctx.reply(setConfigList(list));
     bot.on('message', function messageReceiver(msg: IBotContext) {
-      if (msg.from.id === ctx.from.id) {
-        // bot.removeListener('message', messageReceiver);
-        // if (msg.text && /\/\d+/.test(msg.message.text)) {
-        //   const index = +msg.message.text.substr(1) - 1;
-        //   const selectId = Object.keys(list)[index];
+      // if (msg.from.id === ctx.from.id) {
+      // bot.removeListener('message', messageReceiver);
+      // if (msg.text && /\/\d+/.test(msg.message.text)) {
+      //   const index = +msg.message.text.substr(1) - 1;
+      //   const selectId = Object.keys(list)[index];
 
-        //   list[selectId] ? resolve(list[selectId]) : reject();
-        // } else {
-        //   reject();
-        // }
-        reject();
-      }
+      //   list[selectId] ? resolve(list[selectId]) : reject();
+      // } else {
+      //   reject();
+      // }
+      reject();
     });
   });
 

@@ -1,26 +1,15 @@
 import { Schema, Document, Model } from 'mongoose';
 import sanitizerPlugin from 'mongoose-sanitizer';
 
-// import { IVacanciesInquiries } from '../../interfaces';
-
-export interface IUser {
-  tel_id: number;
-  first_name?: string;
-  last_name?: string;
-  username?: string;
-  city?: string;
-  category?: string;
-  status: 'active' | 'pause' | 'pending';
-  createdAt: number;
-  updatedAt: number;
-}
+import { IUser } from '../../interfaces';
 
 export interface IUserDocument extends IUser, Document {}
 
 export interface IUserModel extends Model<IUserDocument> {
-  // getVacanciesInquiry(): Promise<IVacanciesInquiries>;
-  // getActives(): Promise<Array<IUserDocument>>;
-  // getById(id: number): Promise<IUserDocument>;
+  getActives(): Promise<Array<IUserDocument>>;
+  getById(id: number): Promise<IUserDocument>;
+  pause(id: number): Promise<IUserDocument>;
+  active(id: number): Promise<IUserDocument>;
   updateUser(id: number, user: Partial<IUser>): Promise<IUserDocument>;
 }
 
@@ -51,25 +40,21 @@ UserSchema.plugin(sanitizerPlugin);
 //   this.update({}, { $set: { updatedAt: Date.now() } });
 // });
 
-// userSchema.static('getVacanciesInquiry', async function(this: IUserModel) {
-//   const map = {};
-//   for (const user of await this.getActives()) {
-//     const { category, city } = user;
-//     if (category && city) {
-//       if (!map[category]) map[category] = new Set();
-//       map[category].add(city);
-//     }
-//   }
-//   return map;
-// });
+UserSchema.static('getActives', function(this: IUserModel) {
+  return this.find({ status: 'active' }).exec();
+});
 
-// UserSchema.static('getActives', function(this: IUserModel) {
-//   return this.find({ status: 'active' }).exec();
-// });
+UserSchema.static('getById', function(this: IUserModel, id: number) {
+  return this.findOne({ tel_id: id }).exec();
+});
 
-// UserSchema.static('getById', function(this: IUserModel, id: number) {
-//   return this.findOne({ tel_id: id }).exec();
-// });
+UserSchema.static('pause', function(this: IUserModel, id: number) {
+  return this.findOneAndUpdate({ tel_id: id }, { status: 'pause' }).exec();
+});
+
+UserSchema.static('active', function(this: IUserModel, id: number) {
+  return this.findOneAndUpdate({ tel_id: id }, { status: 'active' }).exec();
+});
 
 UserSchema.static('updateUser', function(
   this: IUserModel,
@@ -78,13 +63,3 @@ UserSchema.static('updateUser', function(
 ) {
   return this.findOneAndUpdate({ tel_id: id }, user).exec();
 });
-
-// userSchema.static('updateUser', function(
-//   this: IUserModel,
-
-// ) {
-//   export const createUser = ({
-//     from: { id, first_name, last_name, username },
-//   }: Message) =>
-//     new User({ tel_id: id, first_name, last_name, username }).save();
-// });

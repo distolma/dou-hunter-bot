@@ -1,8 +1,8 @@
 import { ExtraEditMessage } from 'telegraf/typings/telegram-types';
 
-import { IVacancy } from '../interfaces';
+import { IVacancy, IUser } from '../interfaces';
 import { bot } from '../bot';
-import { IUserDocument, IUser } from '../db/models/User';
+import { IUserDocument } from '../db/models/User';
 import { messageDivisor } from './messages-divisor';
 
 export async function notifyUsers(
