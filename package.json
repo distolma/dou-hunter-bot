@@ -45,6 +45,8 @@
     "mongoose-sanitizer": "^1.0.0",
     "ms": "^2.1.1",
     "node-emoji": "^1.8.1",
-    "telegraf": "^3.22.2"
+    "system-sleep": "^1.3.6",
+    "telegraf": "^3.22.2",
+    "telegraf-session-local": "^0.0.5"
   }
 }

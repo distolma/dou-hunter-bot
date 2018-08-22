@@ -44,10 +44,17 @@ export interface IDOUParams {
   beginners?: boolean;
 }
 
+export interface ISession {
+  config_step: number;
+}
+
+export interface IState {
+  user: IUserDocument;
+}
+
 export interface IDOUResponse extends IVacancy, IDOUParams {}
 
 export interface IBotContext extends ContextMessageUpdate {
-  state: {
-    user: IUserDocument;
-  };
+  state: IState;
+  session: ISession;
 }
