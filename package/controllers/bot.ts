@@ -1,6 +1,5 @@
 import { emoji } from 'node-emoji';
 
-import { bot } from '../bot';
 import { IBotContext } from '../interfaces';
 import {
   welcomeMessage,
@@ -49,38 +48,47 @@ export const onConfig = async (ctx: IBotContext) => {
   configureUser(ctx);
 };
 
-const getConfig = <T>(ctx: IBotContext, list: T) =>
-  new Promise<string>((resolve, reject) => {
-    ctx.reply(setConfigList(list));
-    bot.on('message', function messageReceiver(msg: IBotContext) {
-      // if (msg.from.id === ctx.from.id) {
-      // bot.removeListener('message', messageReceiver);
-      // if (msg.text && /\/\d+/.test(msg.message.text)) {
-      //   const index = +msg.message.text.substr(1) - 1;
-      //   const selectId = Object.keys(list)[index];
+function updateUserPref(ctx: IBotContext, pref: any, key: string) {
+  const index = +ctx.message.text.substr(1) - 1;
+  const selectId = Object.keys(pref)[index];
+  const result = { [key]: pref[selectId] };
 
-      //   list[selectId] ? resolve(list[selectId]) : reject();
-      // } else {
-      //   reject();
-      // }
-      reject();
-    });
-  });
+  if (!result[key]) throw Error('Not Found');
 
-const configureUser = async (ctx: IBotContext) => {
-  const { id } = ctx.from;
-  await User.updateUser(id, { status: 'pending' });
+  return User.findOneAndUpdate({ tel_id: ctx.from.id }, result).exec();
+}
 
+export const onNumberCommand = async (ctx: IBotContext) => {
   try {
-    const city = await getConfig<typeof Cities>(ctx, Cities);
-    await User.findOneAndUpdate({ tel_id: id }, { city }).exec();
+    switch (ctx.session.config_step) {
+      case 0: {
+        ctx.session.config_step++;
 
-    const category = await getConfig<typeof Categories>(ctx, Categories);
-    await User.findOneAndUpdate({ tel_id: id }, { category }).exec();
+        return ctx.reply(setConfigList(Cities));
+      }
+      case 1: {
+        ctx.session.config_step++;
 
-    User.updateUser(id, { status: 'active' });
-    return ctx.reply('we are ready! ' + emoji.v);
-  } catch (error) {
+        await updateUserPref(ctx, Cities, 'city');
+        return ctx.reply(setConfigList(Categories));
+      }
+      case 2: {
+        delete ctx.session.config_step;
+
+        await updateUserPref(ctx, Categories, 'category');
+        await User.updateUser(ctx.from.id, { status: 'active' });
+        return ctx.reply('we are ready! ' + emoji.v);
+      }
+    }
+  } catch {
+    delete ctx.session.config_step;
     return ctx.reply('wrong' + emoji.smirk);
   }
+};
+
+const configureUser = async (ctx: IBotContext) => {
+  ctx.session.config_step = 0;
+  await User.updateUser(ctx.from.id, { status: 'pending' });
+
+  return onNumberCommand(ctx);
 };

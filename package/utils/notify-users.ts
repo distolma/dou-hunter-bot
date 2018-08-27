@@ -1,4 +1,5 @@
 import { ExtraEditMessage } from 'telegraf/typings/telegram-types';
+import sleep from 'system-sleep';
 
 import { IVacancy, IUser } from '../interfaces';
 import { bot } from '../bot';
@@ -9,6 +10,7 @@ export async function notifyUsers(
   users: IUserDocument[],
   vacs: IVacancy[],
 ): Promise<void> {
+  let limit = 0;
   users.forEach(async u => {
     const user: IUser = u.toObject();
     const vacanciesArray = vacs.filter(
@@ -16,6 +18,12 @@ export async function notifyUsers(
     );
 
     const vacancies = messageDivisor(vacanciesArray);
+    limit++;
+
+    if (limit >= 29) {
+      sleep(1000);
+      limit = 0;
+    }
 
     for (const message of vacancies) {
       try {
