@@ -24,7 +24,7 @@ export async function notifyUsers(
           disable_web_page_preview: true,
         } as ExtraEditMessage);
       } catch (error) {
-        console.log(error.message);
+        console.log(error.message, user.tel_id);
         break;
       }
     }
