@@ -75,7 +75,7 @@ export class Api {
 
       return Parser.create(data.html).getVacancies(params.category);
     } catch (error) {
-      console.log(error.message);
+      console.log(params, error.message);
       return [];
     }
   }
