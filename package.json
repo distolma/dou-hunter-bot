@@ -19,7 +19,7 @@
     }
   },
   "lint-staged": {
-    "*.ts": ["npm run lint", "git add"]
+    "package/**/*.ts": ["npm run lint", "npm run prettier", "git add"]
   },
   "engines": {
     "yarn": ">1.2.0"
