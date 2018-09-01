@@ -32,6 +32,5 @@ export async function hunt(ctx: IRouterContext) {
 }
 
 export async function botWebhook(ctx: IRouterContext) {
-  bot.handleUpdate(ctx.request.body as any, ctx.response as any);
-  ctx.status = 200;
+  return bot.handleUpdate(ctx.request.body as any, ctx.response as any);
 }
