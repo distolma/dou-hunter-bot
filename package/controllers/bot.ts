@@ -36,16 +36,16 @@ export const onPing = (ctx: IBotContext) => {
 
 export const onPause = async (ctx: IBotContext) => {
   await User.pause(ctx.from.id);
-  ctx.reply('Paused!');
+  return ctx.reply('Paused!');
 };
 
 export const onResume = async (ctx: IBotContext) => {
   await User.active(ctx.from.id);
-  ctx.reply('Activated!');
+  return ctx.reply('Activated!');
 };
 
 export const onConfig = async (ctx: IBotContext) => {
-  configureUser(ctx);
+  return configureUser(ctx);
 };
 
 function updateUserPref(ctx: IBotContext, pref: any, key: string) {
