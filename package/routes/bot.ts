@@ -7,6 +7,7 @@ import {
   onResume,
   onConfig,
   onNumberCommand,
+  notFound,
 } from '../controllers/bot';
 
 bot.start(getUser, onStart);
@@ -18,3 +19,6 @@ bot.hears(/\/\d+/, onNumberCommand);
 // bot.onText(/\/stop/, onPing);
 // bot.onText(/\/info/, onPing);
 // bot.onText(/\/help/, onPing);
+
+// Default
+bot.on('message', notFound);

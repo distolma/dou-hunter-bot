@@ -34,6 +34,10 @@ export const onPing = (ctx: IBotContext) => {
   return ctx.reply('pong');
 };
 
+export const notFound = (ctx: IBotContext) => {
+  return ctx.reply(`Command is not defined ${emoji.cactus}`);
+};
+
 export const onPause = async (ctx: IBotContext) => {
   await User.pause(ctx.from.id);
   return ctx.reply('Paused!');
@@ -79,6 +83,8 @@ export const onNumberCommand = async (ctx: IBotContext) => {
         await User.updateUser(ctx.from.id, { status: 'active' });
         return ctx.reply('we are ready! ' + emoji.v);
       }
+      default:
+        throw Error();
     }
   } catch {
     delete ctx.session.config_step;
