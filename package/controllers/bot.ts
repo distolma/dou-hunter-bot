@@ -1,7 +1,6 @@
-import { Message } from 'node-telegram-bot-api';
 import { emoji } from 'node-emoji';
 
-import { bot } from '../bot';
+import { IBotContext } from '../interfaces';
 import {
   welcomeMessage,
   welcomeMessageToNew,
@@ -11,83 +10,85 @@ import { Cities } from '../dictionaries/cities';
 import { Categories } from '../dictionaries/categories';
 import { User } from '../db';
 
-export const onStart = async (message: Message) => {
-  const { id } = message.chat;
+export const onStart = async (ctx: IBotContext) => {
+  const { id } = ctx.from;
+  let { user } = ctx.state;
 
-  let user = await User.findOne({ tel_id: id }).exec();
   if (!user) {
-    user = await User.create({ tel_id: id, ...message.from });
-    bot.sendMessage(id, welcomeMessageToNew(user));
+    user = await User.create({ tel_id: id, ...ctx.from });
+    await ctx.reply(welcomeMessageToNew(user));
 
-    configureUser(id);
+    configureUser(ctx);
 
     return;
   }
 
   if (user.status === 'pending') {
-    configureUser(id);
+    configureUser(ctx);
   }
 
-  bot.sendMessage(id, welcomeMessage(user));
+  return ctx.reply(welcomeMessage(user));
 };
 
-export const onPing = async (message: Message) => {
-  bot.sendMessage(message.from.id, 'pong');
+export const onPing = (ctx: IBotContext) => {
+  return ctx.reply('pong');
 };
 
-export const onPause = async (message: Message) => {
-  await User.findOneAndUpdate(
-    { tel_id: message.from.id },
-    { status: 'pause' },
-  ).exec();
-  bot.sendMessage(message.from.id, 'Paused!');
+export const onPause = async (ctx: IBotContext) => {
+  await User.pause(ctx.from.id);
+  ctx.reply('Paused!');
 };
 
-export const onResume = async (message: Message) => {
-  await User.findOneAndUpdate(
-    { tel_id: message.from.id },
-    { status: 'active' },
-  ).exec();
-  bot.sendMessage(message.from.id, 'Activated!');
+export const onResume = async (ctx: IBotContext) => {
+  await User.active(ctx.from.id);
+  ctx.reply('Activated!');
 };
 
-export const onConfig = async (message: Message) => {
-  const { id } = message.from;
-
-  configureUser(id);
+export const onConfig = async (ctx: IBotContext) => {
+  configureUser(ctx);
 };
 
-const getConfig = <T>(id: number, list: T) =>
-  new Promise<string>((resolve, reject) => {
-    bot.sendMessage(id, setConfigList(list));
-    bot.on('message', function messageReceiver(msg: Message) {
-      if (msg.from.id === id) {
-        bot.removeListener('message', messageReceiver);
-        if (msg.text && /\/\d+/.test(msg.text)) {
-          const index = +msg.text.substr(1) - 1;
-          const selectId = Object.keys(list)[index]
+function updateUserPref(ctx: IBotContext, pref: any, key: string) {
+  const index = +ctx.message.text.substr(1) - 1;
+  const selectId = Object.keys(pref)[index];
+  const result = { [key]: pref[selectId] };
 
-          list[selectId] ? resolve(list[selectId]) : reject();
-        } else {
-          reject();
-        }
-      }
-    });
-  });
+  if (!result[key]) throw Error('Not Found');
 
-const configureUser = async (id: number) => {
-  await User.updateUser(id, { status: 'pending' });
+  return User.findOneAndUpdate({ tel_id: ctx.from.id }, result).exec();
+}
 
+export const onNumberCommand = async (ctx: IBotContext) => {
   try {
-    const city = await getConfig<typeof Cities>(id, Cities);
-    await User.findOneAndUpdate({ tel_id: id }, { city }).exec();
+    switch (ctx.session.config_step) {
+      case 0: {
+        ctx.session.config_step++;
 
-    const category = await getConfig<typeof Categories>(id, Categories);
-    await User.findOneAndUpdate({ tel_id: id }, { category }).exec();
+        return ctx.reply(setConfigList(Cities));
+      }
+      case 1: {
+        ctx.session.config_step++;
 
-    User.updateUser(id, { status: 'active' });
-    bot.sendMessage(id, 'we are ready! ' + emoji.v);
-  } catch (error) {
-    bot.sendMessage(id, 'wrong' + emoji.smirk);
+        await updateUserPref(ctx, Cities, 'city');
+        return ctx.reply(setConfigList(Categories));
+      }
+      case 2: {
+        delete ctx.session.config_step;
+
+        await updateUserPref(ctx, Categories, 'category');
+        await User.updateUser(ctx.from.id, { status: 'active' });
+        return ctx.reply('we are ready! ' + emoji.v);
+      }
+    }
+  } catch {
+    delete ctx.session.config_step;
+    return ctx.reply('wrong' + emoji.smirk);
   }
+};
+
+const configureUser = async (ctx: IBotContext) => {
+  ctx.session.config_step = 0;
+  await User.updateUser(ctx.from.id, { status: 'pending' });
+
+  return onNumberCommand(ctx);
 };

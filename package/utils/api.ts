@@ -19,17 +19,17 @@ export class Api {
 
   private mapParams(params: IDOUParams): IDOUParams {
     switch (true) {
-      case (params.category === Categories.Beginners):
+      case params.category === Categories.Beginners:
         delete params.category;
         params.beginners = true;
         return params;
 
-      case (params.city === Cities.Remote):
+      case params.city === Cities.Remote:
         delete params.city;
         params.remote = true;
         return params;
 
-      case (params.city === Cities.Relocation):
+      case params.city === Cities.Relocation:
         delete params.city;
         params.relocation = true;
         return params;
