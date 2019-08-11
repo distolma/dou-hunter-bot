@@ -1,11 +1,10 @@
-language: node_js
-node_js:
-  - "10"
+sudo: required
+services:
+  - docker
 script:
-  - npm run build
+  - make image
 deploy:
-  provider: heroku
-  skip_cleanup: true
-  api_key:
-    secure: $HEROKU_TOKEN
-  app: dou-hunter-bot
+  provider: script 
+  script: make login && make push-image
+  on:
+    branch: master 
