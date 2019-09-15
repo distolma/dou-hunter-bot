@@ -1,5 +1,5 @@
 import { Schema, Document, Model } from 'mongoose';
-import sanitizerPlugin from 'mongoose-sanitize';
+import sanitizerPlugin from 'mongoose-sanitizer';
 
 import { IUser } from '../../interfaces';
 

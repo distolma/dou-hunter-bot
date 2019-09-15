@@ -1,5 +1,5 @@
 import { Schema, Model, Document } from 'mongoose';
-import sanitizerPlugin from 'mongoose-sanitize';
+import sanitizerPlugin from 'mongoose-sanitizer';
 import { differenceBy, uniqBy } from 'lodash';
 
 import { IVacancy, IDOUResponse } from '../../interfaces';
