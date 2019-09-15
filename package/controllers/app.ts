@@ -1,4 +1,4 @@
-import { IRouterContext } from 'koa-router';
+import { RouterContext } from '@koa/router';
 import { uniqWith, isEqual, flatten } from 'lodash';
 
 import { bot } from '../bot';
@@ -8,7 +8,7 @@ import { IUserDocument } from '../db/models/User';
 import { Vacancy } from '../db';
 import { IDOUResponse } from '../interfaces';
 
-export async function hunt(ctx: IRouterContext) {
+export async function hunt(ctx: RouterContext) {
   const api: Api = ctx.state.api;
   const activeUsers: IUserDocument[] = ctx.state.users;
 
@@ -31,6 +31,6 @@ export async function hunt(ctx: IRouterContext) {
   ctx.status = 200;
 }
 
-export async function botWebhook(ctx: IRouterContext) {
+export async function botWebhook(ctx: RouterContext) {
   return bot.handleUpdate(ctx.request.body as any, ctx.response as any);
 }

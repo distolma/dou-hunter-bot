@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 
 import { hunt, botWebhook } from '../controllers/app';
 import { tokens } from '../middlewares/tokens';
