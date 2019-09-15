@@ -26,7 +26,8 @@
     ]
   },
   "engines": {
-    "yarn": ">1.2.0"
+    "yarn": ">1.2.0",
+    "node": "12.x"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.13",
