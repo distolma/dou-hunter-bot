@@ -1,10 +1,11 @@
-sudo: required
-services:
-  - docker
+language: node_js
+node_js:
+  - "10"
 script:
-  - make image
+  - npm run build
 deploy:
-  provider: script 
-  script: make login && make push-image
-  on:
-    branch: master 
+  provider: heroku
+  skip_cleanup: true
+  api_key:
+    secure: $HEROKU_TOKEN
+  app: dou-hunter-bot

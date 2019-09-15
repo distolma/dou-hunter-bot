@@ -7,7 +7,7 @@
   "author": "distolma <djmakaron2009@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node -r dotenv/config dist/app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/app.ts",
     "build": "tsc",
     "lint": "tslint --fix ./package/**",
@@ -19,11 +19,7 @@
     }
   },
   "lint-staged": {
-    "package/**/*.ts": [
-      "npm run lint",
-      "npm run prettier",
-      "git add"
-    ]
+    "package/**/*.ts": ["npm run lint", "npm run prettier", "git add"]
   },
   "engines": {
     "yarn": ">1.2.0"
