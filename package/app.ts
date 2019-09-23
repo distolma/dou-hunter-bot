@@ -20,5 +20,5 @@ const server = app.listen(PORT || 80, () => {
 });
 
 process.on('unhandledRejection', reason => {
-  console.log('Unhandled Rejection at:', reason.stack || reason);
+  console.log('Unhandled Rejection at:', reason || reason);
 });
