@@ -1,5 +1,4 @@
 import { Schema, Document, Model } from 'mongoose';
-import sanitizerPlugin from 'mongoose-sanitizer';
 
 import { IUser } from '../../interfaces';
 
@@ -32,8 +31,6 @@ export const UserSchema = new Schema(
   },
   { timestamps: true },
 );
-
-UserSchema.plugin(sanitizerPlugin);
 
 // // Hooks
 // UserSchema.pre('save', function(this: IUserDocument) {

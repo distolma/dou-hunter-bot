@@ -1,5 +1,4 @@
 import { Schema, Model, Document } from 'mongoose';
-import sanitizerPlugin from 'mongoose-sanitizer';
 import { differenceBy, uniqBy } from 'lodash';
 
 import { IVacancy, IDOUResponse } from '../../interfaces';
@@ -52,8 +51,6 @@ export const VacancySchema = new Schema(
 );
 
 VacancySchema.index({ createdAt: 1 }, { expires: '1w' });
-
-VacancySchema.plugin(sanitizerPlugin);
 
 VacancySchema.static('insertVacancies', async function(
   this: IVacancyModel,
