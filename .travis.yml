@@ -1,11 +1,8 @@
-language: node_js
-node_js:
-  - "10"
+language: generic
+sudo: required
+services:
+  - docker
 script:
-  - npm run build
-deploy:
-  provider: heroku
-  skip_cleanup: true
-  api_key:
-    secure: $HEROKU_TOKEN
-  app: dou-hunter-bot
+  - heroku container:login
+  - heroku container:push web -a dou-hunter-bot
+  - heroku container:release web -a dou-hunter-bot

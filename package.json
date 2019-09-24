@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon -e ts -w ./package -x ts-node --inspect -r dotenv/config package/app.ts",
-    "build": "tsc --skipLibCheck",
+    "build": "tsc",
     "lint": "tslint --fix ./package/**",
     "prettier": "prettier --write ./package/**"
   },
