@@ -1,5 +1,8 @@
 language: generic
 sudo: required
+branches:
+  only:
+  - master
 services:
   - docker
 script:
