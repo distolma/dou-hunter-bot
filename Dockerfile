@@ -11,7 +11,7 @@ RUN npm run build
 
 FROM base
 WORKDIR /usr/src/dou-hunter
-COPY --from=builder /usr/src/builder ./dist
+COPY --from=builder /usr/src/builder/dist ./dist
 COPY package*.json ./
 RUN npm ci
 
