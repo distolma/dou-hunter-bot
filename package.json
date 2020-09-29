@@ -29,7 +29,7 @@
     "yarn": ">1.2.0"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.21",
+    "@types/cheerio": "^0.22.22",
     "@types/cookie": "^0.4.0",
     "@types/koa": "^2.11.3",
     "@types/koa-bodyparser": "^5.0.2",
