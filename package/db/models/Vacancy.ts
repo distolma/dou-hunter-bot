@@ -1,5 +1,4 @@
 import { Schema, Model, Document } from 'mongoose';
-import { differenceBy, uniqBy } from 'lodash';
 
 import { IVacancy, IDOUResponse } from '../../interfaces';
 import { Categories } from '../../dictionaries/categories';
@@ -56,17 +55,12 @@ VacancySchema.static('insertVacancies', async function(
   this: IVacancyModel,
   vacancies: IDOUResponse[],
 ) {
-  const vacanciesIds = vacancies.map(vac => vac.id);
-  const existingVacancies = await this.find({
-    id: { $in: vacanciesIds },
-  }).exec();
-  const notExistingVacancies = differenceBy(
-    uniqBy(vacancies, 'id'),
-    existingVacancies,
-    'id',
-  );
-
-  return this.insertMany(notExistingVacancies, { ordered: false }).catch(err =>
-    console.log(JSON.stringify(err, null, 2)),
-  );
+  try {
+    return await this.insertMany(vacancies, { ordered: false });
+  } catch (error) {
+    if (error.code !== 11000) {
+      return console.log(JSON.stringify(error, null, 2));
+    }
+    return error.insertedDocs;
+  }
 });
